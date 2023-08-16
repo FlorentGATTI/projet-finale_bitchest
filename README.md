@@ -72,5 +72,8 @@ npm install</code></li>
 <h1>Licence :</h1>
 <p>Ce projet est sous licence MIT.</p>
 
+<h1>Diagrame</h1>
+<p>https://dbdiagram.io/d/64dc975c02bd1c4a5edc17e3</p>
+
 </body>
 </html>

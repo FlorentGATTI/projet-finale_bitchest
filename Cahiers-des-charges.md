@@ -10,7 +10,7 @@
 
 <h1>Contraintes Techniques :</h1>
 <ul>
-  <li>Front-end : Utilisation du framework React ou Vue.</li>
+  <li>Front-end : Utilisation du framework React.</li>
   <li>Back-end : Utilisation du framework Laravel.</li>
   <li>Utilisation d'API et services tiers autorisée.</li>
 </ul>

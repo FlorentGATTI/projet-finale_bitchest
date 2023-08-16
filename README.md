@@ -74,7 +74,7 @@ npm install</code></li>
 
 <h1>Diagrame</h1>
 
-![Database Diagram](/Applications/MAMP/htdocs/projet-finale_bitchest/diagram.svg)
+![Database Diagram](diagram.png)
 
 [View Database Diagram](https://dbdiagram.io/embed/64dc975c02bd1c4a5edc17e3)
 

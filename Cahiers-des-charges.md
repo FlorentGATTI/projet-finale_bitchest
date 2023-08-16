@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cahier des Charges - Projet BitChest</title>
+  <h1>Cahier des Charges - Projet BitChest</h1>
 </head>
 <body>
 

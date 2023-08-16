@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>README - Projet BitChest</title>
+  <h1>README - Projet BitChest</h1>
 </head>
 <body>
 

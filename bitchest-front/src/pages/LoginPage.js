@@ -10,13 +10,16 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    axios.defaults.withCredentials = true;
+    await axios.get("http://localhost:8000/sanctum/csrf-cookie")
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+      const response = await axios.post("http://localhost:8000/login", {
         email: email,
         password: password,
       });
 
-      if (response.status === 200) {
+      console.log("test", response);
+      if (response.status === 202) {
         // Connexion réussie, utilisez le jeton d'authentification
         console.log("Connexion réussie", response.data.token);
       } else {

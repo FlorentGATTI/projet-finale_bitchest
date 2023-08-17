@@ -1,17 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./components/Navbar"; // Importez le composant Navbar
 import LoginPage from "./pages/LoginPage"; // Importez le composant LoginPage
-// import RegistrationForm from "./forms/RegistrationForm"; // Importez le composant LoginPage
+import DashboardPage from "./pages/DashboardPage"; 
 
 import "./App.css";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <div className="App">
-      <Navbar /> {/* Utilisez le composant Navbar */}
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} /> {/* Utilisez le composant Navbar */}
       <div className="container">
-        <LoginPage />
-        {/* <RegistrationForm /> */}
+        {isLoggedIn ? <DashboardPage /> : <LoginPage onLogin={handleLogin} />}
       </div>
     </div>
   );

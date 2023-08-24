@@ -24,22 +24,12 @@ function NavbarComponent({ isLoggedIn, onLogout }) {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            {isLoggedIn ? (
-              <>
-                <li className="nav-item">
-                  <button className="btn nav-link" onClick={handleLogout}>
-                    Déconnexion
-                  </button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <a className="nav-link" href="#login">
-                    Connexion
-                  </a>
-                </li>
-              </>
+            {isLoggedIn && (
+              <li className="nav-item">
+                <button className="btn nav-link" onClick={handleLogout}>
+                  Déconnexion
+                </button>
+              </li>
             )}
           </ul>
         </div>

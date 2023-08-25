@@ -1,14 +1,12 @@
 import React from 'react';
 
-function DashboardPage() {
+function CryptoConsultation() {
   return (
     <div>
-      <h2>Tableau de bord all users</h2>
+      <h2>CryptoConsultation</h2>
       {/* Ajoute ici le contenu de ton tableau de bord */}
     </div>
   );
 }
 
-export default DashboardPage;
-
-// 
+export default CryptoConsultation;

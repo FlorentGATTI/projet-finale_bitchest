@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Navbar, Nav, Button } from "react-bootstrap";
 
 function NavbarComponent({ isLoggedIn, onLogout }) {
   const handleLogout = async () => {
@@ -7,34 +8,29 @@ function NavbarComponent({ isLoggedIn, onLogout }) {
       axios.defaults.withCredentials = true;
       await axios.post("http://localhost:8000/logout");
       onLogout();
-      console.log('deco', onLogout());
     } catch (error) {
       console.error("Une erreur est survenue lors de la déconnexion", error);
     }
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container">
-        <a className="navbar-brand" href="#home">
-          BitChest
-        </a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
+    <div className="navbar-container">
+      <Navbar expand="lg" className="flex-column">
+        <Navbar.Brand href="#home">BitChest</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ml-auto">
             {isLoggedIn && (
-              <li className="nav-item">
-                <button className="btn nav-link" onClick={handleLogout}>
+              <Nav.Item>
+                <Button variant="link" onClick={handleLogout}>
                   Déconnexion
-                </button>
-              </li>
+                </Button>
+              </Nav.Item>
             )}
-          </ul>
-        </div>
-      </div>
-    </nav>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
   );
 }
 

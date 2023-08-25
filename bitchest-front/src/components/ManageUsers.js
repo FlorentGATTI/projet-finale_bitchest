@@ -50,7 +50,9 @@ function CryptoGraph({ cryptoData }) {
   const chartOptions = {
     scales: {
       y: {
+        type: "linear", // Utilisez "linear" pour une échelle linéaire
         beginAtZero: true,
+        // max: 500,
       },
     },
   };

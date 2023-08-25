@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./components/Navbar"; // Importez le composant Navbar
 import LoginPage from "./pages/LoginPage"; // Importez le composant LoginPage
-import DashboardPage from "./pages/DashboardPage"; 
+import DashboardPage from "./pages/DashboardPage";
 
 import "./App.css";
 
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} /> {/* Utilisez le composant Navbar */}
+      {isLoggedIn && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />} {/* Utilisez le composant Navbar uniquement si l'utilisateur est connecté */}
       <div className="container">
         {isLoggedIn ? <DashboardPage /> : <LoginPage onLogin={handleLogin} />}
       </div>

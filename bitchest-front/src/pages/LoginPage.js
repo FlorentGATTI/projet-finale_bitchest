@@ -18,11 +18,14 @@ function LoginPage({ onLogin }) {
         password: password,
       });
 
-      console.log("test", response);
+      console.log('response', response);
+
       if (response.status === 202) {
         // Connexion réussie, utilisez le jeton d'authentification
+
         console.log("Connexion réussie", response.data.token);
-        onLogin(); // Appelle la fonction onLogin passée en tant que props
+        
+        onLogin(response.data.user.role); // Appelle la fonction onLogin passée en tant que props
       } else {
         // Erreur de connexion
         console.error("Erreur de connexion", response.data.message);

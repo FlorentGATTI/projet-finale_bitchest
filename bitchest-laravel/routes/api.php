@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CryptocurrencyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Route pour afficher la liste des cryptomonnaies aux clients et aux admins
+    Route::get('/dashboard', [CryptocurrencyController::class, 'index'])->name('dashboard');
 });

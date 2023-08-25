@@ -16,9 +16,14 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('authToken')->plainTextToken;
 
-            return response()->json(['user' => $user, 'token' => $token], 200);
+            return response()->json([
+                'user' => $user,
+                'token' => $token,
+                'role' => $user->role, // Ajoutez cette ligne pour renvoyer le rôle de l'utilisateur
+            ], 200);
         } else {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
     }
 }
+

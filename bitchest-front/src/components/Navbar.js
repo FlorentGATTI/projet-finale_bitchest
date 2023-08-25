@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import "./NavbarComponent.css";
 
 function NavbarComponent({ isLoggedIn, onLogout }) {
   const navigate = useNavigate();
@@ -23,36 +24,38 @@ function NavbarComponent({ isLoggedIn, onLogout }) {
         <Navbar.Brand href="#home">BitChest</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="flex-column ml-auto">
+          <div className="links-container">
+            <Nav className="flex-column">
+              {isLoggedIn && (
+                <Nav.Item>
+                  <Link to="/dashboard" className="nav-link">
+                    Tableau de bord
+                  </Link>
+                </Nav.Item>
+              )}
+              {isLoggedIn && (
+                <Nav.Item>
+                  <Link to="/cryptos" className="nav-link">
+                    Consultation des cours
+                  </Link>
+                </Nav.Item>
+              )}
+              {isLoggedIn && (
+                <Nav.Item>
+                  <Link to="/clients" className="nav-link">
+                    Gérer les clients
+                  </Link>
+                </Nav.Item>
+              )}
+            </Nav>
             {isLoggedIn && (
-              <Nav.Item>
-                <Link to="/dashboard" className="nav-link">
-                  Tableau de bord
-                </Link>
-              </Nav.Item>
-            )}
-            {isLoggedIn && (
-              <Nav.Item>
-                <Link to="/cryptos" className="nav-link">
-                  Consultation des cours
-                </Link>
-              </Nav.Item>
-            )}
-            {isLoggedIn && (
-              <Nav.Item>
-                <Link to="/clients" className="nav-link">
-                  Gérer les clients
-                </Link>
-              </Nav.Item>
-            )}
-            {isLoggedIn && (
-              <Nav.Item>
+              <div className="button-deco">
                 <Button variant="dark" onClick={handleLogout} className="logout-btn">
                   Déconnexion
                 </Button>
-              </Nav.Item>
+              </div>
             )}
-          </Nav>
+          </div>
         </Navbar.Collapse>
       </Navbar>
     </div>

@@ -1,0 +1,74 @@
+.navbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 240px;
+    background-color: #292c36; /* Couleur de fond */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .navbar-brand {
+    color: #00cc66; /* Couleur du texte */
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .navbar {
+    height: 100%;
+  }
+
+  .button-deco {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .links-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+  }
+  
+  .nav-link {
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    transition: color 0.3s;
+    width: 100%;
+  }
+  
+  .nav-link:hover {
+    color: #00cc66; /* Couleur au survol */
+    text-decoration: none;
+  }
+  
+  .logout-btn {
+    margin-top: auto;
+    background-color: #ff6666; /* Couleur du bouton */
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .logout-btn:hover {
+    background-color: #ff3333; /* Couleur au survol */
+    color: #fff;
+    text-decoration: none;
+  }
+  

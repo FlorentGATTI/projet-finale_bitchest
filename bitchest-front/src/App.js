@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Navbar from "./components/Navbar"; // Importez le composant Navbar
-import LoginPage from "./pages/LoginPage"; // Importez le composant LoginPage
-import DashboardPage from "./pages/DashboardPage";
-import CryptoConsultation from "./pages/CryptoConsultation";
+import Navbar from "./components/navbar/Navbar"; // Importez le composant Navbar
+import LoginPage from "./pages/login/loginPage.js"; // Importez le composant LoginPage
+import DashboardPage from "./pages/dashboard/dashboardPage";
+import CryptoConsultation from "./pages/cryptoConsultation/cryptoConsultation";
 import ManageUsers from "./components/ManageUsers"; // Importez le composant ManageUsers
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
@@ -28,7 +28,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {isLoggedIn && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
+        {isLoggedIn && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} userRole={userRole} />}
         <div className="container">
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />} />

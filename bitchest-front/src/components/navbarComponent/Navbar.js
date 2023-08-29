@@ -21,7 +21,11 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
   return (
     <div className="navbar-container">
       <Navbar expand="lg" className="flex-column">
-        <Navbar.Brand href="#home">BitChest</Navbar.Brand>
+        <Navbar.Brand>
+          <Link className="navbar-brand" to="/dashboard">
+            BitChest
+          </Link>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <div className="links-container">
@@ -42,7 +46,7 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
               )}
               {isLoggedIn && userRole === "client" && (
                 <Nav.Item>
-                  <Link to="/portfolio" className="nav-link">
+                  <Link to="/wallet" className="nav-link">
                     Gérer le portefeuille
                   </Link>
                 </Nav.Item>
@@ -56,7 +60,7 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
               )}
               {isLoggedIn && userRole === "admin" && (
                 <Nav.Item>
-                  <Link to="/manage-clients" className="nav-link">
+                  <Link to="/clients" className="nav-link">
                     Gérer les clients
                   </Link>
                 </Nav.Item>

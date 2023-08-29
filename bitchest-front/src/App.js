@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import Navbar from "./components/navbar/Navbar"; // Importez le composant Navbar
-import LoginPage from "./pages/login/loginPage.js"; // Importez le composant LoginPage
-import DashboardPage from "./pages/dashboard/dashboardPage";
-import CryptoConsultation from "./pages/cryptoConsultation/cryptoConsultation";
-import ManageUsers from "./components/ManageUsers"; // Importez le composant ManageUsers
+import Navbar from "./components/navbarComponent/Navbar"; // Importez le composant Navbar
+import LoginPage from "./pages/loginPage/Login"; // Importez le composant LoginPage
+import Dashboard from "./pages/dashboardPage/Dashboard";
+import CryptoConsultation from "./pages/cryptoConsultationPage/CryptoConsultation";
+import DataPersonel from "./pages/dataClientPage/DataClient";
+import ManageClients from "./pages/manageClientsPage/ManageClients"; // Importez le composant ManageUsers
+import Wallet from "./pages/walletPage/Wallet"; // Importez le composant ManageUsers
+
+
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
 import "./App.css";
@@ -32,9 +36,11 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />} />
-            <Route path="/dashboard" element={isLoggedIn ? <DashboardPage /> : <Navigate to="/" replace />} />
+            <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />} />
             <Route path="/cryptos" element={isLoggedIn ? <CryptoConsultation /> : null} />
-            <Route path="/clients" element={isLoggedIn && isAdmin ? <ManageUsers /> : null} />
+            <Route path="/wallet" element={isLoggedIn ? <Wallet /> : null} />
+            <Route path="/data" element={isLoggedIn ? <DataPersonel /> : null} />
+            <Route path="/clients" element={isLoggedIn && isAdmin ? <ManageClients /> : null} />
           </Routes>
         </div>
       </div>

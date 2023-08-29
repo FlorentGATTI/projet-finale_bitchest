@@ -1,12 +1,12 @@
 import React from 'react';
 
-function CryptoConsultation() {
+function Wallet() {
   return (
     <div>
-      <h2>CryptoConsultation</h2>
+      <h2>Gerer le Wallet !!</h2>
       {/* Ajoute ici le contenu de ton tableau de bord */}
     </div>
   );
 }
 
-export default CryptoConsultation;
+export default Wallet;

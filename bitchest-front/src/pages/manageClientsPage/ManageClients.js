@@ -1,15 +1,15 @@
 import React from 'react';
 
-function ManageUsers() {
+function ManageClients() {
   return (
     <div>
-      <h2>Tableau de bord Client</h2>
+      <h2>Gerer les clients</h2>
       {/* Ajoute ici le contenu de ton tableau de bord */}
     </div>
   );
 }
 
-export default ManageUsers;
+export default ManageClients;
 
 
 

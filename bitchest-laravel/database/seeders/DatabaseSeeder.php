@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CryptoCurrenciesTableSeeder::class,
             CryptoCurrencyPricesTableSeeder::class,
             TransactionsTableSeeder::class,
+            WalletSeeder::class,
         ]);
     }
 }

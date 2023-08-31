@@ -4,15 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Wallet;
+use Database\Factories\WalletFactory; // Importez la factory WalletFactory
 
 class WalletSeeder extends Seeder
 {
     public function run()
     {
         User::all()->each(function ($user) {
-            Wallet::factory()->create(['user_id' => $user->id]);
+            WalletFactory::new()->create(['user_id' => $user->id]); // Utilisez la factory WalletFactory
         });
     }
 }
-

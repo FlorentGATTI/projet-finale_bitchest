@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CryptocurrencyController;
+use App\Http\Controllers\CryptocurrencypriceController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route pour afficher la liste des cryptomonnaies aux clients et aux admins
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
     Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index']);
+    Route::get('/cryptocurrenciesprice', [CryptocurrencypriceController::class, 'index']); 
+
     // Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     // Route::get('/wallet/purchases', [WalletController::class, 'purchases'])->name('wallet.purchases');
 });

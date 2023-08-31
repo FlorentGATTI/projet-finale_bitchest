@@ -31,9 +31,9 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
+      <div className="App container">
         {isLoggedIn && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} userRole={userRole} />}
-        <div className="container">
+        <div className="content">
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />} />
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />} />

@@ -2,3 +2,15 @@
   text-align: center;
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* Aligner le contenu en haut */
+  justify-content: flex-start; /* Aligner le contenu à gauche */
+  padding: 20px; /* Ajoutez un espace pour la lisibilité */
+}
+
+.content {
+  flex-grow: 1; /* Permet au contenu de prendre toute la largeur disponible */
+  padding-left: 150px; /* Ajoutez de l'espace entre la barre de navigation et le contenu */
+}

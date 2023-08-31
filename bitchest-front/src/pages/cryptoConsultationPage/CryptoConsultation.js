@@ -1,10 +1,12 @@
 import React from 'react';
+import CryptoConsultationComponents from '../../components/cryptoConsultation/CryptoConsultationComponent';
 
 function CryptoConsultation() {
   return (
     <div>
-      <h2>Cours des crypto monnaies</h2>
-      {/* Ajoute ici le contenu de ton tableau de bord */}
+      <h1>Affichage de la liste de Cryptomonnaie !</h1>
+      <CryptoConsultationComponents />
+      {/* Ajoutez d'autres éléments ou routes ici si nécessaire */}
     </div>
   );
 }

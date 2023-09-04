@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import CryptoChart from "../CryptoChart/CryptoChart"; // Assurez-vous d'avoir le bon chemin d'accès
+import CryptoChart from "../CryptoChart/CryptoChart";
+import './CryptoConsultationComponent.css';
 
 function CryptoConsultationComponent({ userRole }) {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
-  const [cryptos, setCryptos] = useState([]); // Pour les prix
-  const [cryptoProgression, setCryptoProgression] = useState([]); // Pour la progression
+  const [cryptos, setCryptos] = useState([]);
+  const [cryptoProgression, setCryptoProgression] = useState([]);
 
   useEffect(() => {
     axios
@@ -15,44 +16,64 @@ function CryptoConsultationComponent({ userRole }) {
       })
       .catch(console.error);
 
-    // Si l'utilisateur est un client, récupérez les prix des crypto-monnaies
+    axios
+      .get("http://localhost:8000/api/cryptocurrenciesprice")
+      .then((response) => {
+        setCryptos(response.data);
+      })
+      .catch(console.error);
+
     if (userRole === "client") {
       axios
-        .get("http://localhost:8000/api/cryptocurrenciesprice")
+        .get("http://localhost:8000/api/cryptocurrencies/progression")
         .then((response) => {
-          setCryptos(response.data);
-        })
-        .catch(console.error);
-    }
-
-    // Si l'utilisateur est un admin, récupérez les données de progression des crypto-monnaies
-    if (userRole === "admin") {
-      axios
-        .get("http://localhost:8000/api/cryptosprogression")
-        .then((response) => {
+          console.log("setCryptoProgression", response.data);
           setCryptoProgression(response.data);
         })
         .catch(console.error);
     }
   }, [userRole]);
 
+  const handleBuyClick = (cryptoId, cryptoName) => {
+    const userCryptoOwnership = 20; // Ceci est un exemple. Vous devriez récupérer cette valeur depuis votre base de données ou API.
+
+    if (userCryptoOwnership >= 30) {
+      alert(`Vous possédez déjà 30% ou plus de ${cryptoName}. Vous ne pouvez pas acheter davantage.`);
+      return;
+    }
+
+    const cryptoPrice = cryptos.find((item) => item.cryptocurrency_id === cryptoId).price;
+    const maxPurchaseAmount = 5000;
+
+    const maxQuantity = Math.floor(maxPurchaseAmount / cryptoPrice);
+
+    const quantity = window.prompt(`Combien de ${cryptoName} souhaitez-vous acheter ? Vous pouvez acheter jusqu'à ${maxQuantity} en fonction du prix actuel.`);
+
+    if (quantity && quantity * cryptoPrice <= maxPurchaseAmount) {
+      alert(`Vous avez choisi d'acheter ${quantity} de ${cryptoName}.`);
+      // Appeler l'API pour traiter l'achat, stocker la transaction, etc.
+    } else {
+      alert(`Vous ne pouvez pas dépenser plus de ${maxPurchaseAmount}€ en un seul achat.`);
+    }
+  };
+
   return (
-    <div>
-      <h2>Cours des crypto-monnaies</h2>
-      <ul>
+    <div className="container-fluid bg-dark text-light mobile-pt py-5">
+      <h2 className="mb-4">Cours des crypto-monnaies</h2>
+      <ul className="list-unstyled">
         {cryptocurrencies.map((crypto) => {
-          if (userRole === "client") {
-            const cryptoPrice = cryptos.find((item) => item.cryptocurrency_id === crypto.id);
-            return (
-              <li key={crypto.id}>
-                {crypto.name} ({crypto.symbol}) - {cryptoPrice ? cryptoPrice.price : "N/A"}€
-              </li>
-            );
-          }
-          const progression = cryptoProgression.find((item) => item.cryptocurrency_id === crypto.id);
+          const cryptoPrice = cryptos.find((item) => item.cryptocurrency_id === crypto.id);
+          const chartData = cryptoProgression.find((item) => item.name === crypto.name);
+
           return (
-            <li key={crypto.id}>
-              {crypto.name} ({crypto.symbol}){progression && <CryptoChart data={progression} />}
+            <li key={crypto.id} className="mb-5">
+              <h3 className="font-weight-bold text-warning">{crypto.name} ({crypto.symbol}) - {cryptoPrice ? cryptoPrice.price : "N/A"}€</h3>
+              {userRole === "client" && chartData && (
+                <div>
+                  <CryptoChart data={chartData} />
+                  <button className="btn btn-warning mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name)}>Acheter</button>
+                </div>
+              )}
             </li>
           );
         })}

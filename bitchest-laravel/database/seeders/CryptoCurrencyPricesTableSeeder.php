@@ -5,9 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\CryptoCurrencyPrice;
 use App\Models\CryptoCurrency;
-
-
-require_once base_path('cotation_generator.php');
+use App\Helpers\CotationGenerator; 
 
 class CryptoCurrencyPricesTableSeeder extends Seeder
 {
@@ -16,7 +14,6 @@ class CryptoCurrencyPricesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Génération des prix des crypto-monnaies sur 30 jours
         $cryptoCurrencies = [
             'Bitcoin', 'Ethereum', 'Ripple', 'Bitcoin Cash', 'Cardano',
             'Litecoin', 'NEM', 'Stellar', 'IOTA', 'Dash'
@@ -26,12 +23,12 @@ class CryptoCurrencyPricesTableSeeder extends Seeder
 
         foreach ($cryptoCurrencies as $crypto) {
             $currentDate = $startDate;
-            $currentPrice = getFirstCotation($crypto);
+            
+            // Utilisez les méthodes depuis la classe CotationGenerator
+            $currentPrice = CotationGenerator::getFirstCotation($crypto);
 
-            // Obtenir l'ID de la crypto-monnaie
             $cryptoId = CryptoCurrency::where('name', $crypto)->value('id');
 
-            // Utiliser l'ID pour créer les enregistrements
             for ($day = 1; $day <= 30; $day++) {
                 CryptoCurrencyPrice::create([
                     'cryptocurrency_id' => $cryptoId,
@@ -40,7 +37,7 @@ class CryptoCurrencyPricesTableSeeder extends Seeder
                     'updated_at' => $currentDate,
                 ]);
 
-                $currentPrice += getCotationFor($crypto);
+                $currentPrice += CotationGenerator::getCotationFor($crypto); // Utilisez la méthode depuis la classe CotationGenerator
                 $currentDate = $currentDate->addDay();
             }
         }

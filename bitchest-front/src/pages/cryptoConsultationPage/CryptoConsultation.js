@@ -1,12 +1,12 @@
-import React from 'react';
-import CryptoConsultationComponents from '../../components/cryptoConsultation/CryptoConsultationComponent';
+import React from "react";
+import CryptoConsultationComponents from "../../components/cryptoConsultation/CryptoConsultationComponent";
+import './CryptoConsultation.css';
 
-function CryptoConsultation({ userRole }) { // Acceptez userRole ici
+function CryptoConsultation({ userRole }) {
 
   return (
-    <div>
-      <h1>Affichage de la liste de Cryptomonnaie !</h1>
-      <CryptoConsultationComponents userRole={userRole}/> {/* Transmettez-le ici */}
+    <div className="main-content container">
+      <CryptoConsultationComponents userRole={userRole} />
       {/* Ajoutez d'autres éléments ou routes ici si nécessaire */}
     </div>
   );

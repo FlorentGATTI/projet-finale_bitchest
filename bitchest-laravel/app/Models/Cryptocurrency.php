@@ -14,4 +14,8 @@ class Cryptocurrency extends Model
         'symbol',
     ];
     
+    public function prices()
+    {
+        return $this->hasMany(CryptoCurrencyPrice::class);
+    }
 }

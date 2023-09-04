@@ -21,64 +21,45 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
 
   return (
     <div className="navbar-container">
-      <Navbar expand="lg" className="flex-column" expanded={expanded}>
-        <Navbar.Brand>
-          <Link className="navbar-brand" to="/dashboard">
+      <Navbar expand="lg" bg="dark" variant="dark">
+        <Container fluid>
+        <Navbar.Brand as={Link} to="/dashboard" className="navbar-brand-custom">
             BitChest
-          </Link>
-        </Navbar.Brand>
-        <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
-          onClick={() => setExpanded(!expanded)}
-        />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Container fluid className="links-container">
-            <Nav className="flex-column">
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} className="ml-auto" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
               {isLoggedIn && (
-                <Nav.Item>
-                  <Link to="/dashboard" className="nav-link">
+                <>
+                  <Nav.Link as={Link} to="/dashboard">
                     Tableau de bord
-                  </Link>
-                </Nav.Item>
-              )}
-              {isLoggedIn && (
-                <Nav.Item>
-                  <Link to="/cryptos" className="nav-link">
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/cryptos">
                     Consultation des cours des crypto monnaies
-                  </Link>
-                </Nav.Item>
-              )}
-              {isLoggedIn && userRole === "client" && (
-                <Nav.Item>
-                  <Link to="/wallet" className="nav-link">
-                    Gérer le portefeuille
-                  </Link>
-                </Nav.Item>
-              )}
-              {isLoggedIn && (
-                <Nav.Item>
-                  <Link to="/data" className="nav-link">
+                  </Nav.Link>
+                  {userRole === "client" && (
+                    <Nav.Link as={Link} to="/wallet">
+                      Gérer le portefeuille
+                    </Nav.Link>
+                  )}
+                  <Nav.Link as={Link} to="/data">
                     Gérer leur donnée personnelle
-                  </Link>
-                </Nav.Item>
-              )}
-              {isLoggedIn && userRole === "admin" && (
-                <Nav.Item>
-                  <Link to="/clients" className="nav-link">
-                    Gérer les clients
-                  </Link>
-                </Nav.Item>
+                  </Nav.Link>
+                  {userRole === "admin" && (
+                    <Nav.Link as={Link} to="/clients">
+                      Gérer les clients
+                    </Nav.Link>
+                  )}
+                </>
               )}
             </Nav>
-          </Container>
-        </Navbar.Collapse>
-        {isLoggedIn && (
-          <div className="button-deco">
-            <Button variant="dark" onClick={handleLogout} className="logout-btn">
-              Déconnexion
-            </Button>
-          </div>
-        )}
+            {isLoggedIn && (
+              <Button variant="outline-danger" onClick={handleLogout}>
+                Déconnexion
+              </Button>
+            )}
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
     </div>
   );

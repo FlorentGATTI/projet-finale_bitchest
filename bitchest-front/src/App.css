@@ -1,4 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
 }
 
+.container,
+.container-fluid,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl,
+.container-xxl {
+  /* Ces propriétés ont été commentées pour être désactivées */
+  --bs-gutter-x: 0rem;
+  /* ... autres propriétés ... */
+  max-width: 100%;
+}
+
+@media (min-width: 576px) {
+  .container,
+  .container-sm {
+    max-width: 100%;
+  }
+}
+@media screen and (max-width: 992px) {
+  .content {
+    padding-top: 68px;
+  }
+}

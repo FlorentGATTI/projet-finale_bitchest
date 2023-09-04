@@ -37,7 +37,7 @@ function App() {
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />} />
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />} />
-            <Route path="/cryptos" element={isLoggedIn ? <CryptoConsultation /> : null} />
+            <Route path="/cryptos" element={isLoggedIn ? <CryptoConsultation userRole={userRole} /> : null} />
             <Route path="/wallet" element={isLoggedIn ? <Wallet /> : null} />
             <Route path="/data" element={isLoggedIn ? <DataPersonel /> : null} />
             <Route path="/clients" element={isLoggedIn && isAdmin ? <ManageClients /> : null} />

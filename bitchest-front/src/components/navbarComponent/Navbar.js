@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { Navbar, Nav, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -20,15 +21,18 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
 
   return (
     <div className="navbar-container">
-      <Navbar expand="lg" className="flex-column">
+      <Navbar expand="lg" className="flex-column" expanded={expanded}>
         <Navbar.Brand>
           <Link className="navbar-brand" to="/dashboard">
             BitChest
           </Link>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle
+          aria-controls="basic-navbar-nav"
+          onClick={() => setExpanded(!expanded)}
+        />
         <Navbar.Collapse id="basic-navbar-nav">
-          <div className="links-container">
+          <Container fluid className="links-container">
             <Nav className="flex-column">
               {isLoggedIn && (
                 <Nav.Item>
@@ -66,15 +70,15 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
                 </Nav.Item>
               )}
             </Nav>
-            {isLoggedIn && (
-              <div className="button-deco">
-                <Button variant="dark" onClick={handleLogout} className="logout-btn">
-                  Déconnexion
-                </Button>
-              </div>
-            )}
-          </div>
+          </Container>
         </Navbar.Collapse>
+        {isLoggedIn && (
+          <div className="button-deco">
+            <Button variant="dark" onClick={handleLogout} className="logout-btn">
+              Déconnexion
+            </Button>
+          </div>
+        )}
       </Navbar>
     </div>
   );

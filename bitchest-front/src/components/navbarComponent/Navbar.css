@@ -5,9 +5,7 @@
 }
 
 .navbar-brand-custom {
-  color: #00cc66;
-  font-size: 1.5rem;
-  padding: 0.5rem 2rem; /* ajout de padding autour du titre */
+  padding: 0.5rem 1.5rem; /* Increased padding as per request */
 }
 
 .nav-link {

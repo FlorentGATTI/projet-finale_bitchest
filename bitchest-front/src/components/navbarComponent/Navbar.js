@@ -23,14 +23,14 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
     <div className="navbar-container">
       <Navbar expand="lg" bg="dark" variant="dark">
         <Container fluid>
-        <Navbar.Brand as={Link} to="/dashboard" className="navbar-brand-custom">
+          <Navbar.Brand as={Link} to="/dashboard" className="navbar-brand-custom">
             BitChest
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} className="ml-auto" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              {isLoggedIn && (
-                <>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(!expanded)} />
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+            {isLoggedIn && (
+              <>
+                <Nav className="mr-auto">
                   <Nav.Link as={Link} to="/dashboard">
                     Tableau de bord
                   </Nav.Link>
@@ -50,13 +50,11 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
                       Gérer les clients
                     </Nav.Link>
                   )}
-                </>
-              )}
-            </Nav>
-            {isLoggedIn && (
-              <Button variant="outline-danger" onClick={handleLogout}>
-                Déconnexion
-              </Button>
+                </Nav>
+                <Button variant="outline-danger" onClick={handleLogout}>
+                  Déconnexion
+                </Button>
+              </>
             )}
           </Navbar.Collapse>
         </Container>

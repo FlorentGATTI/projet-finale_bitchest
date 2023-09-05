@@ -1,57 +1,50 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CryptoChart from "../CryptoChart/CryptoChart";
-import './CryptoConsultationComponent.css';
+import "./CryptoConsultationComponent.css";
 
 function CryptoConsultationComponent({ userRole }) {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
   const [cryptos, setCryptos] = useState([]);
   const [cryptoProgression, setCryptoProgression] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/cryptocurrencies")
-      .then((response) => {
-        setCryptocurrencies(response.data);
-      })
-      .catch(console.error);
+  const fetchData = async (url) => {
+    try {
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    axios
-      .get("http://localhost:8000/api/cryptocurrenciesprice")
-      .then((response) => {
-        setCryptos(response.data);
-      })
-      .catch(console.error);
+  useEffect(() => {
+    fetchData("http://localhost:8000/api/cryptocurrencies").then(setCryptocurrencies);
+    fetchData("http://localhost:8000/api/cryptocurrenciesprice").then(setCryptos);
 
     if (userRole === "client") {
-      axios
-        .get("http://localhost:8000/api/cryptocurrencies/progression")
-        .then((response) => {
-          console.log("setCryptoProgression", response.data);
-          setCryptoProgression(response.data);
-        })
-        .catch(console.error);
+      fetchData("http://localhost:8000/api/cryptocurrencies/progression").then(setCryptoProgression);
     }
   }, [userRole]);
 
   const handleBuyClick = (cryptoId, cryptoName) => {
-    const userCryptoOwnership = 20; // Ceci est un exemple. Vous devriez récupérer cette valeur depuis votre base de données ou API.
+    const userCryptoOwnership = 20;
 
     if (userCryptoOwnership >= 30) {
       alert(`Vous possédez déjà 30% ou plus de ${cryptoName}. Vous ne pouvez pas acheter davantage.`);
       return;
     }
 
-    const cryptoPrice = cryptos.find((item) => item.cryptocurrency_id === cryptoId).price;
+    const cryptoPriceObj = cryptos.find((item) => item.cryptocurrency_id === cryptoId);
+    const cryptoPrice = cryptoPriceObj ? cryptoPriceObj.price : null;
     const maxPurchaseAmount = 5000;
 
-    const maxQuantity = Math.floor(maxPurchaseAmount / cryptoPrice);
+    const maxQuantity = cryptoPrice ? Math.floor(maxPurchaseAmount / cryptoPrice) : 0;
 
     const quantity = window.prompt(`Combien de ${cryptoName} souhaitez-vous acheter ? Vous pouvez acheter jusqu'à ${maxQuantity} en fonction du prix actuel.`);
 
-    if (quantity && quantity * cryptoPrice <= maxPurchaseAmount) {
+    if (quantity && cryptoPrice && quantity * cryptoPrice <= maxPurchaseAmount) {
       alert(`Vous avez choisi d'acheter ${quantity} de ${cryptoName}.`);
-      // Appeler l'API pour traiter l'achat, stocker la transaction, etc.
+      // Ici, ajoutez le traitement pour l'achat
     } else {
       alert(`Vous ne pouvez pas dépenser plus de ${maxPurchaseAmount}€ en un seul achat.`);
     }
@@ -62,16 +55,22 @@ function CryptoConsultationComponent({ userRole }) {
       <h2 className="mb-4">Cours des crypto-monnaies</h2>
       <ul className="list-unstyled">
         {cryptocurrencies.map((crypto) => {
-          const cryptoPrice = cryptos.find((item) => item.cryptocurrency_id === crypto.id);
-          const chartData = cryptoProgression.find((item) => item.name === crypto.name);
+          const cryptoNameForImage = crypto.name.toLowerCase().replace(/ /g, "-"); // For accessing image
+          const cryptoPriceObj = cryptos.find((item) => item.cryptocurrency_id === crypto.id);
+          const chartData = cryptoProgression.find((item) => item.name.toLowerCase() === crypto.name.toLowerCase()); // No replacement here
 
           return (
             <li key={crypto.id} className="mb-5">
-              <h3 className="font-weight-bold text-warning">{crypto.name} ({crypto.symbol}) - {cryptoPrice ? cryptoPrice.price : "N/A"}€</h3>
+              <img src={`/assets/images/${cryptoNameForImage}.png`} alt={crypto.name} className="pictocrypto" width="32" height="32" />
+              <h3 className="font-weight-bold text-warning d-inline-block">
+                {crypto.name} ({crypto.symbol}) - {cryptoPriceObj ? cryptoPriceObj.price : "N/A"}€
+              </h3>
               {userRole === "client" && chartData && (
                 <div>
                   <CryptoChart data={chartData} />
-                  <button className="btn btn-warning mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name)}>Acheter</button>
+                  <button className="btn btn-warning mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name)}>
+                    Acheter
+                  </button>
                 </div>
               )}
             </li>

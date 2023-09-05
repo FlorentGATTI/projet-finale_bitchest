@@ -22,42 +22,49 @@ function CryptoChart({ data = {} }) {
   const options = {
     chart: {
       type: "line",
-      foreColor: '#fff' // couleur par défaut pour les textes du graphique
+      foreColor: "#fff",
     },
     xaxis: {
       categories: categories,
       labels: {
         style: {
-          colors: '#fff' // couleur pour les étiquettes de l'axe des x
-        }
+          colors: "#fff",
+        },
       },
       axisBorder: {
-        color: '#fff' // couleur pour la bordure/bâton de l'axe des x
-      }
+        color: "#fff",
+      },
     },
     yaxis: {
       labels: {
         style: {
-          colors: '#fff' // couleur pour les étiquettes de l'axe des y
-        }
-      }
-    }
+          colors: "#fff",
+        },
+      },
+    },
+    tooltip: {
+      theme: "dark",
+      style: {
+        colors: ["#000"],
+      },
+    },
   };
-  
+
   return (
-    <div className="chart-container mb-4" style={{
-      maxWidth: "90%",
-      background: "rgb(51, 51, 51)",
-      borderRadius: "10px",
-      padding: "20px",
-      margin: "0 auto" // Cette propriété centre le conteneur horizontalement.
-    }}>
+    <div
+      className="chart-container mb-4"
+      style={{
+        maxWidth: "90%",
+        background: "rgb(51, 51, 51)",
+        borderRadius: "10px",
+        padding: "20px",
+        margin: "0 auto", // Cette propriété centre le conteneur horizontalement.
+      }}
+    >
       <h2 style={{ color: "#fff" }}>Courbe de progression de la crypto-monnaie</h2>
       <ReactApexChart options={{ ...options, colors: ["#f8c545"] }} series={[{ name: "Prix en €", data: series }]} type="line" />
     </div>
   );
-
-  
 }
 
 export default CryptoChart;

@@ -1,113 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Assurez-vous d'avoir importé axios car nous l'utilisons pour effectuer la requête API
+import "./ManageClients.css";
 
 function ManageClients() {
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("client");
+
+  useEffect(() => {
+    // Appel de la fonction pour récupérer l'utilisateur actuel
+    fetchCurrentUser();
+
+    // Simulez l'appel API pour obtenir la liste des utilisateurs (vous pouvez éventuellement supprimer cette partie si elle n'est pas nécessaire)
+    setUsers([
+      { id: 1, name: "John Doe", email: "john@example.com", role: "client" },
+      { id: 2, name: "Admin", email: "admin@example.com", role: "admin" },
+    ]);
+  }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+        const response = await axios.get('http://localhost:8000/api/manage-clients');
+
+        // Vérification des données de réponse avant de mettre à jour l'état
+        const newName = response.data.name || name;
+        const newEmail = response.data.email || email;
+
+        setName(newName);
+        setEmail(newEmail);
+    } catch (error) {
+        console.error("Il y a eu une erreur lors de l'appel API:", error);
+    }
+  };
+
+  const handleUserSelect = (user) => {
+    setName(user.name);
+    setEmail(user.email);
+    setRole(user.role);
+  };
+
   return (
-    <div>
-      <h2>Gerer les clients</h2>
-      {/* Ajoute ici le contenu de ton tableau de bord */}
+    <div className="manage-clients-container bg-dark">
+      <h2 className="py-5">Gérer les clients</h2>
+
+      {/* Liste des utilisateurs */}
+      <div className="user-list">
+        <h3>Liste des utilisateurs</h3>
+        <ul>
+          {users.map((user) => (
+            <li key={user.id} onClick={() => handleUserSelect(user)}>
+              {user.name} - {user.email} - {user.role}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Modification de l'utilisateur */}
+      <div className="user-details">
+        <h3>Modifier un utilisateur</h3>
+
+        <div className="form-group">
+          <label>Nom :</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        </div>
+
+        <div className="form-group">
+          <label>Email :</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+
+        <div className="form-group">
+          <label>Rôle :</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="client">Client</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <button className="btn btn-primary">Mettre à jour</button>
+        <button className="btn btn-danger">Supprimer</button>
+      </div>
     </div>
   );
 }
 
 export default ManageClients;
-
-
-
-
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Line } from "react-chartjs-2";
-
-
-
-// function CryptoList() {
-//   const [cryptos, setCryptos] = useState([]);
-
-//   useEffect(() => {
-//     async function fetchCryptos() {
-//       try {
-//         const response = await axios.get("http://localhost:8000/api/cryptocurrencies");
-//         setCryptos(response.data);
-//       } catch (error) {
-//         console.error("Une erreur est survenue lors de la récupération des cryptos", error);
-//       }
-//     }
-
-//     fetchCryptos();
-//   }, []);
-
-//   return (
-//     <div>
-//       <h2>Liste des Cryptos</h2>
-//       <ul>
-//         {cryptos.map((crypto) => (
-//           <li key={crypto.id}>
-//             {crypto.name} - Cours actuel: {crypto.cryptocurrencyprice ? crypto.cryptocurrencyprice.price : "N/A"} $
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// function CryptoGraph({ cryptoData }) {
-//   const chartData = {
-//     labels: cryptoData.map((crypto) => crypto.name),
-//     datasets: [
-//       {
-//         label: "Progression de Prix",
-//         data: cryptoData.map((crypto) => (crypto.cryptocurrency_price ? crypto.cryptocurrency_price.price : 0)),
-//         borderColor: "rgba(75,192,192,1)",
-//         backgroundColor: "rgba(75,192,192,0.2)",
-//       },
-//     ],
-//   };
-
-//   const chartOptions = {
-//     scales: {
-//       y: {
-//         type: "linear", // Utilisez "linear" pour une échelle linéaire
-//         beginAtZero: true,
-//         max: 500,
-//       },
-//     },
-//   };
-
-//   return (
-//     <div>
-//       <h2>Courbe de Progression</h2>
-//       <Line data={chartData} options={chartOptions} />
-//     </div>
-//   );
-// }
-
-// function CryptoBuy() {
-//   // ... Votre code pour l'achat de crypto
-// }
-
-// function ManageCryptos() {
-//   const [cryptoData, setCryptoData] = useState([]);
-
-//   useEffect(() => {
-//     async function fetchCryptos() {
-//       try {
-//         const response = await axios.get("http://localhost:8000/api/cryptocurrencies");
-//         setCryptoData(response.data);
-//       } catch (error) {
-//         console.error("Une erreur est survenue lors de la récupération des cryptos", error);
-//       }
-//     }
-
-//     fetchCryptos();
-//   }, []);
-
-//   return (
-//     <div>
-//       <CryptoList />
-//       <CryptoGraph cryptoData={cryptoData} />
-//       <CryptoBuy />
-//     </div>
-//   );
-// }
-
-// export default ManageCryptos;

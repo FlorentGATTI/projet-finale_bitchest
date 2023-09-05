@@ -69,4 +69,10 @@ class UserController extends Controller
         $user->delete();
         return response()->json(['message' => 'User deleted']);
     }
+
+    public function showPersonalData()
+    {
+        $user = auth()->user();
+        return response()->json($user);
+    }
 }

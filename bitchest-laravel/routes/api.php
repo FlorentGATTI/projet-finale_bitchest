@@ -24,6 +24,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index']);
     Route::get('/cryptocurrenciesprice', [CryptocurrencypriceController::class, 'index']); 
     Route::get('/cryptocurrencies/progression', [CryptocurrencyController::class, 'getCryptoProgression']);
+    Route::get('/manage-clients', [UserController::class, 'index'])->name('manage.clients');
+    Route::get('/data-personel', [UserController::class, 'showPersonalData'])->name('data.personel');
 
 
     // Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');

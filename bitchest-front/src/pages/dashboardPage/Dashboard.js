@@ -4,7 +4,7 @@ import "./Dashboard.css";
 function Dashboard() {
   return (
     <div className="dashboard-container bg-dark">
-      <h2>Dashboard BitChest</h2>
+      <h2 className="py-5">Dashboard BitChest</h2>
 
       {/* Statistiques générales */}
       <div className="statistics">

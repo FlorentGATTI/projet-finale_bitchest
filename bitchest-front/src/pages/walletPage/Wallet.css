@@ -1,0 +1,64 @@
+.wallet-container {
+    color: #fff;
+    padding: 2rem;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
+
+.balance-alert {
+    background: #232323;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.bg-items {
+    background: rgb(51, 51, 51);
+}
+
+.wallet-content, .sell-form {
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.crypto-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.crypto-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #343434;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.crypto-select, .crypto-input {
+    width: 100%;
+    padding: 0.5rem;
+    background: #343434;
+    border: 1px solid #4A4A4A;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+
+.sell-button {
+    background-color: #f8a102;
+    border: none;
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sell-button:hover {
+    background-color: #e59200;
+}

@@ -23,6 +23,12 @@ function CryptoChart({ data = {} }) {
     chart: {
       type: "line",
       foreColor: "#fff",
+      toolbar: {
+        tools: {
+          download: true,
+        },
+        autoSelected: "zoom",
+      },
     },
     xaxis: {
       categories: categories,
@@ -47,6 +53,14 @@ function CryptoChart({ data = {} }) {
       style: {
         colors: ["#000"],
       },
+    },
+    theme: {
+      monochrome: {
+        enabled: true,
+        color: "#f8c545",
+        shadeIntensity: 0.65,
+      },
+      mode: "dark", // change le thème global en mode sombre
     },
   };
 

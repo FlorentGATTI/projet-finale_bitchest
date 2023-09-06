@@ -18,4 +18,13 @@ class Cryptocurrency extends Model
     {
         return $this->hasMany(CryptoCurrencyPrice::class);
     }
+
+    public function currentPrice()
+    {
+        // Obtenir le dernier prix enregistré pour cette cryptocurrency
+        $latestPrice = $this->prices()->orderBy('created_at', 'desc')->first();
+
+        // Retourner le prix si il est disponible sinon retourner null
+        return $latestPrice ? $latestPrice->price : null;
+    }
 }

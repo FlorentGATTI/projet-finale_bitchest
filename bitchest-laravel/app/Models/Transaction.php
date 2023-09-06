@@ -27,4 +27,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(Cryptocurrency::class);
     }
+
+    public function currentProfit()
+    {
+        $currentPrice = $this->cryptocurrency->currentPrice(); // Je suppose que vous avez une méthode qui obtient le prix actuel
+        return ($currentPrice - $this->price_per_unit) * $this->quantity;
+    }
 }

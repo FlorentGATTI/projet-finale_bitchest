@@ -1,20 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Wallet.css";
 
 function Wallet() {
-  const [cryptos] = useState([
-    { name: "Bitcoin", amount: 2 },
-    { name: "Ethereum", amount: 5 },
-    { name: "Litecoin", amount: 10 },
-  ]);
-
-  const [cryptoToSell, setCryptoToSell] = useState("Bitcoin");
+  const [cryptos, setCryptos] = useState([]);
+  const [cryptoToSell, setCryptoToSell] = useState("");
   const [quantityToSell, setQuantityToSell] = useState(0);
 
-  // Handles the sale of a cryptocurrency
-  const handleSale = () => {
-    // Implement logic to deduct sold amount from cryptos if necessary
-    console.log(`Vendu ${quantityToSell} ${cryptoToSell}`);
+  useEffect(() => {
+    // Charger les transactions de l'utilisateur dès le chargement du composant
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/transactions");
+        console.log("response transactions", response.data);
+        setCryptos(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des transactions:", error);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  const handleSale = async () => {
+    if (cryptoToSell && quantityToSell > 0) {
+      try {
+        // Ici, vous pouvez appeler votre API pour enregistrer la vente
+        // Pour l'instant, nous allons simplement afficher un message
+        console.log(`Vendu ${quantityToSell} ${cryptoToSell}`);
+        // Après la vente, recharger les transactions
+        const response = await axios.get("http://localhost:8000/api/transactions");
+        setCryptos(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la vente:", error);
+      }
+    } else {
+      console.log("Veuillez sélectionner une cryptomonnaie et une quantité valide.");
+    }
   };
 
   return (
@@ -26,8 +48,8 @@ function Wallet() {
         <h3>Contenu du portefeuille :</h3>
         <ul className="crypto-list">
           {cryptos.map((crypto) => (
-            <li key={crypto.name} className="crypto-item">
-              {crypto.name}: {crypto.amount}
+            <li key={crypto.id} className="crypto-item">
+              Crypto ID {crypto.cryptocurrency_id}: {crypto.quantity}
             </li>
           ))}
         </ul>
@@ -41,8 +63,8 @@ function Wallet() {
           <label>Choisissez une cryptomonnaie :</label>
           <select className="crypto-select" value={cryptoToSell} onChange={(e) => setCryptoToSell(e.target.value)}>
             {cryptos.map((crypto) => (
-              <option key={crypto.name} value={crypto.name}>
-                {crypto.name}
+              <option key={crypto.id} value={crypto.cryptocurrency_id}>
+                Crypto ID {crypto.cryptocurrency_id}
               </option>
             ))}
           </select>

@@ -4,46 +4,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CryptocurrencyController;
 use App\Http\Controllers\CryptocurrencypriceController;
-
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-
-// Route::middleware(['auth:sanctum'])->group(function () {
-//     // Route pour afficher la liste des cryptomonnaies aux clients et aux admins
-//     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
-//     Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index']);
-//     Route::get('/cryptocurrenciesprice', [CryptocurrencypriceController::class, 'index']); 
-//     Route::get('/cryptocurrencies/progression', [CryptocurrencyController::class, 'getCryptoProgression']);
-//     Route::get('/data-personel', [UserController::class, 'showPersonalData'])->name('data.personel');
-
-//     // Routes pour les utilisateurs
-//     Route::get('/manage-clients', [UserController::class, 'index'])->name('manage.clients');
-//     Route::get('/manage-clients/{id}', [UserController::class, 'show'])->name('manage.clients.show');
-//     Route::post('/manage-clients', [UserController::class, 'store'])->name('manage.clients.store');
-//     Route::put('/manage-clients/{id}', [UserController::class, 'update'])->name('manage.clients.update');
-//     Route::delete('/manage-clients/{id}', [UserController::class, 'destroy'])->name('manage.clients.destroy');
-//     Route::get('/current-user-data', [UserController::class, 'currentUserData'])->name('current.user.data');
-
-//     // Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
-//     // Route::get('/wallet/purchases', [WalletController::class, 'purchases'])->name('wallet.purchases');
-// });
+use App\Http\Controllers\WalletController;
+use App\Http\Controllers\TransactionController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    
     // Route pour afficher la liste des cryptomonnaies aux clients et aux admins
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
+    
+    // Cryptocurrencies routes
     Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index']);
     Route::get('/cryptocurrenciesprice', [CryptocurrencypriceController::class, 'index']); 
     Route::get('/cryptocurrencies/progression', [CryptocurrencyController::class, 'getCryptoProgression']);
+    
+    // Data Personnel
     Route::get('/data-personel', [UserController::class, 'showPersonalData'])->name('data.personel');
 
     // Routes pour les utilisateurs
@@ -57,34 +31,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::get('/current-user-data', [UserController::class, 'currentUserData'])->name('current.user.data');
 
-    // Pour Wallet, si vous décidez de l'utiliser plus tard
-    // Route::prefix('wallet')->group(function() {
-    //     Route::get('/', [WalletController::class, 'index'])->name('wallet.index');
-    //     Route::get('/purchases', [WalletController::class, 'purchases'])->name('wallet.purchases');
-    // });
+    // Wallet routes
+    Route::prefix('wallet')->group(function() {
+        Route::get('/', [WalletController::class, 'index'])->name('wallet.index');
+        Route::get('/purchases', [WalletController::class, 'purchases'])->name('wallet.purchases');
+    });
+
+    // Transactions routes
+    Route::prefix('transactions')->group(function() {
+        Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
+        Route::get('/{id}', [TransactionController::class, 'show'])->name('transactions.show');
+        Route::post('/', [TransactionController::class, 'store'])->name('transactions.store');
+        Route::put('/{id}', [TransactionController::class, 'update'])->name('transactions.update');
+        Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+        Route::get('/current-profit', [TransactionController::class, 'currentProfit'])->name('transactions.currentProfit');
+    });
 });
-
-
-
-// Route::middleware(['auth:sanctum'])->group(function () {
-//     // Route pour les administrateurs
-//     Route::prefix('admin')->group(function () {
-//         Route::get('/data', [AdminController::class, 'getData']); // Gérer les données personnelles
-//         Route::get('/clients', [AdminController::class, 'getClients']); // Gérer les clients
-//         Route::post('/clients/create', [AdminController::class, 'createClient']); // Créer un client
-//         Route::put('/clients/{id}', [AdminController::class, 'updateClient']); // Modifier un client
-//         Route::delete('/clients/{id}', [AdminController::class, 'deleteClient']); // Supprimer un client
-//     });
-
-//     // Routes pour les clients
-//     Route::prefix('client')->group(function () {
-//         Route::get('/data', [ClientController::class, 'getData']); // Gérer les données personnelles
-//         Route::get('/wallet', [WalletController::class, 'index']); // Gérer le portefeuille
-//         Route::get('/wallet/purchases', [WalletController::class, 'purchases']); // Historique des achats
-//         Route::get('/wallet/profits', [WalletController::class, 'profits']); // Plus-values
-//         Route::post('/wallet/sell/{cryptoId}', [WalletController::class, 'sellCrypto']); // Vendre une crypto
-//     });
-
-//     // Routes pour tous (clients et admins)
-//     Route::get('/cryptos', [CryptocurrencyController::class, 'index']); // Consultation des cours
-// });

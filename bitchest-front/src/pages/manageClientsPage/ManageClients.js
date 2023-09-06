@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, ListGroup, Form, Button } from "react-bootstrap";
+import { Container, ListGroup, Form, Button, Alert } from "react-bootstrap";
 import "./ManageClients.css";
 
 function ManageClients() {
@@ -8,11 +8,22 @@ function ManageClients() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("client");
+  const [password, setPassword] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // réinitialise le formulaire
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setRole("client");
+    setSelectedUserId(null);
+  };
 
   const fetchUsers = async () => {
     try {
@@ -28,48 +39,74 @@ function ManageClients() {
     setEmail(user.email);
     setRole(user.role);
     setSelectedUserId(user.id);
+    setPassword(""); // Reset password field when selecting a user
   };
 
   const handleUpdateUser = async () => {
     if (!selectedUserId) return;
+    const payload = {
+      name,
+      email,
+      role,
+    };
+    if (password) {
+      payload.password = password;
+    }
+
     try {
-      await axios.put(`http://localhost:8000/api/manage-clients/${selectedUserId}`, {
-        name,
-        email,
-        role,
-      });
+      await axios.put(`http://localhost:8000/api/manage-clients/${selectedUserId}`, payload);
       fetchUsers();
+      setFeedback("Utilisateur mis à jour avec succès !");
+      resetForm();
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'utilisateur:", error);
+      setFeedback("Erreur lors de la mise à jour de l'utilisateur.");
     }
   };
 
   const handleDeleteUser = async () => {
     if (!selectedUserId) return;
-    try {
-      await axios.delete(`http://localhost:8000/api/manage-clients/${selectedUserId}`);
-      fetchUsers();
-    } catch (error) {
-      console.error("Erreur lors de la suppression de l'utilisateur:", error);
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
+      try {
+        await axios.delete(`http://localhost:8000/api/manage-clients/${selectedUserId}`);
+        fetchUsers();
+        setFeedback("Utilisateur supprimé avec succès !");
+        resetForm();
+      } catch (error) {
+        console.error("Erreur lors de la suppression de l'utilisateur:", error);
+        setFeedback("Erreur lors de la suppression de l'utilisateur.");
+      }
     }
   };
 
   const handleAddUser = async () => {
     try {
+      if (password.length < 6) {
+        setFeedback("Le mot de passe doit comporter au moins 6 caractères.");
+        return;
+      }
       await axios.post("http://localhost:8000/api/manage-clients", {
         name,
         email,
+        password,
         role,
       });
       fetchUsers();
+      setFeedback("Utilisateur ajouté avec succès !");
+      resetForm();
     } catch (error) {
+      setFeedback(error.response.data.message);
       console.error("Erreur lors de l'ajout de l'utilisateur:", error);
+      setFeedback("Erreur lors de l'ajout de l'utilisateur.");
     }
   };
 
   return (
     <Container className="manage-clients-container bg-dark text-white">
       <h2 className="py-5">Gérer les clients</h2>
+
+      {/* Feedback message */}
+      {feedback && <Alert variant="info">{feedback}</Alert>}
 
       {/* Liste des utilisateurs */}
       <div className="user-list" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -95,6 +132,11 @@ function ManageClients() {
           <Form.Group>
             <Form.Label>Email :</Form.Label>
             <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Mot de passe :</Form.Label>
+            <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </Form.Group>
 
           <Form.Group>

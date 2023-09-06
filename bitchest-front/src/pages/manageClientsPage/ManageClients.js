@@ -109,9 +109,9 @@ function ManageClients() {
       {feedback && <Alert variant="info">{feedback}</Alert>}
 
       {/* Liste des utilisateurs */}
-      <div className="user-list" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div className="user-list mb-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <h3>Liste des utilisateurs</h3>
-        <ListGroup variant="flush" style={{ width: "50%" }}>
+        <ListGroup variant="flush" className="col-12 col-md-6">
           {users.map((user) => (
             <ListGroup.Item key={user.id} action onClick={() => handleUserSelect(user)}>
               {user.name} - {user.email} - {user.role}
@@ -123,7 +123,7 @@ function ManageClients() {
       {/* Modification de l'utilisateur */}
       <div className="user-details mt-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <h3>Modifier un utilisateur</h3>
-        <Form style={{ width: "300px" }}>
+        <Form className="col-12 col-md-6 col-lg-4">
           <Form.Group>
             <Form.Label>Nom :</Form.Label>
             <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ textAlign: "center" }} />

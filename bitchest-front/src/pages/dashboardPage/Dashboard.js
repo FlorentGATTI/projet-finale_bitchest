@@ -22,7 +22,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="dashboard-container bg-dark">
+    <div className="dashboard-container bg-dark" style={{ minHeight: "100vh" }}>
       {userData.role === "admin" ? <DashboardAdmin /> : <DashboardClient />}
     </div>
   );

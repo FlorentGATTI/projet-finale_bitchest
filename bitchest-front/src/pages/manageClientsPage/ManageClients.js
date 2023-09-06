@@ -122,7 +122,7 @@ function ManageClients() {
 
       {/* Modification de l'utilisateur */}
       <div className="user-details mt-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <h3>Modifier un utilisateur</h3>
+        <h3>Ajouter ou modifier  un utilisateur</h3>
         <Form className="col-12 col-md-6 col-lg-4">
           <Form.Group>
             <Form.Label>Nom :</Form.Label>

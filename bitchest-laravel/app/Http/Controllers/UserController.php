@@ -75,4 +75,9 @@ class UserController extends Controller
         $user = auth()->user();
         return response()->json($user);
     }
+
+    public function currentUserData()
+    {
+        return response()->json(auth()->user());
+    }
 }

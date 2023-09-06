@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import "./Wallet.css";
 
 function Wallet() {
-  const [cryptos, setCryptos] = useState([
+  const [cryptos] = useState([
     { name: "Bitcoin", amount: 2 },
     { name: "Ethereum", amount: 5 },
     { name: "Litecoin", amount: 10 },
   ]);
 
-  // const [euroBalance, setEuroBalance] = useState(10000);
   const [cryptoToSell, setCryptoToSell] = useState("Bitcoin");
   const [quantityToSell, setQuantityToSell] = useState(0);
 
+  // Handles the sale of a cryptocurrency
   const handleSale = () => {
+    // Implement logic to deduct sold amount from cryptos if necessary
     console.log(`Vendu ${quantityToSell} ${cryptoToSell}`);
   };
 
@@ -20,30 +21,27 @@ function Wallet() {
     <div className="wallet-container bg-dark">
       <h2 className="py-5">Gérer le Wallet</h2>
 
-      {/* Solde en euro */}
-      {/* <div className="balance-alert bg-items">Solde: {euroBalance}€</div> */}
-
-      {/* Affichage du contenu du portefeuille */}
+      {/* Displaying the wallet's content */}
       <div className="wallet-content bg-items">
         <h3>Contenu du portefeuille :</h3>
         <ul className="crypto-list">
-          {cryptos.map((crypto, index) => (
-            <li key={index} className="crypto-item">
+          {cryptos.map((crypto) => (
+            <li key={crypto.name} className="crypto-item">
               {crypto.name}: {crypto.amount}
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Vente d'une cryptomonnaie */}
+      {/* Cryptocurrency selling form */}
       <div className="sell-form bg-items">
         <h3>Vendre une cryptomonnaie</h3>
 
         <div className="form-group">
           <label>Choisissez une cryptomonnaie :</label>
           <select className="crypto-select" value={cryptoToSell} onChange={(e) => setCryptoToSell(e.target.value)}>
-            {cryptos.map((crypto, index) => (
-              <option key={index} value={crypto.name}>
+            {cryptos.map((crypto) => (
+              <option key={crypto.name} value={crypto.name}>
                 {crypto.name}
               </option>
             ))}

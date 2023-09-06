@@ -102,7 +102,7 @@ function ManageClients() {
   };
 
   return (
-    <Container className="manage-clients-container bg-dark text-white">
+    <Container className="manage-clients-container bg-dark text-white" style={{ minHeight: "100vh" }}>
       <h2 className="py-5">Gérer les clients</h2>
 
       {/* Feedback message */}
@@ -123,20 +123,20 @@ function ManageClients() {
       {/* Modification de l'utilisateur */}
       <div className="user-details mt-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <h3>Modifier un utilisateur</h3>
-        <Form style={{ width: "50%" }}>
+        <Form style={{ width: "300px" }}>
           <Form.Group>
             <Form.Label>Nom :</Form.Label>
-            <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} />
+            <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ textAlign: "center" }} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Email :</Form.Label>
-            <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} style={{ textAlign: "center" }} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Mot de passe :</Form.Label>
-            <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ textAlign: "center" }} />
           </Form.Group>
 
           <Form.Group>

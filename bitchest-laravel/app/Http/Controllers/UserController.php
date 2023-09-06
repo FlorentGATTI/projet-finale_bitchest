@@ -29,7 +29,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
-            // Ajoutez ici d'autres règles de validation
+            'role' => 'required|in:admin,client',
         ]);
 
         $data['password'] = bcrypt($data['password']);
@@ -48,7 +48,7 @@ class UserController extends Controller
             'name' => 'string',
             'email' => 'email|unique:users,email,' . $user->id,
             'password' => 'string|min:6',
-            // Ajoutez ici d'autres règles de validation
+            'role' => 'in:admin,client', // Ajout de cette ligne pour valider le rôle lors de la mise à jour
         ]);
 
         if (isset($data['password'])) {

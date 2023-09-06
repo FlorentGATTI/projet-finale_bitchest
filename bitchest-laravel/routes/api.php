@@ -24,9 +24,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index']);
     Route::get('/cryptocurrenciesprice', [CryptocurrencypriceController::class, 'index']); 
     Route::get('/cryptocurrencies/progression', [CryptocurrencyController::class, 'getCryptoProgression']);
-    Route::get('/manage-clients', [UserController::class, 'index'])->name('manage.clients');
     Route::get('/data-personel', [UserController::class, 'showPersonalData'])->name('data.personel');
 
+    // Routes pour les utilisateurs
+    Route::get('/manage-clients', [UserController::class, 'index'])->name('manage.clients');
+    Route::get('/manage-clients/{id}', [UserController::class, 'show'])->name('manage.clients.show');
+    Route::post('/manage-clients', [UserController::class, 'store'])->name('manage.clients.store');
+    Route::put('/manage-clients/{id}', [UserController::class, 'update'])->name('manage.clients.update');
+    Route::delete('/manage-clients/{id}', [UserController::class, 'destroy'])->name('manage.clients.destroy');
 
     // Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     // Route::get('/wallet/purchases', [WalletController::class, 'purchases'])->name('wallet.purchases');

@@ -52,7 +52,7 @@ function CryptoConsultationComponent({ userRole }) {
 
   return (
     <div className="container-fluid bg-dark text-light mobile-pt py-5">
-      <h2 className="mb-4">Liste des crypto-monnaies</h2>
+      <h2 className="mb-4">Liste des crypto-monnaies disponible</h2>
       <ul className="list-unstyled">
         {cryptocurrencies.map((crypto) => {
           const cryptoNameForImage = crypto.name.toLowerCase().replace(/ /g, "-"); // For accessing image

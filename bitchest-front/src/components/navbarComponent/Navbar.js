@@ -53,21 +53,21 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
             <Nav className="navbar-content mr-auto">
               <Nav.Link as={Link} to="/dashboard">
                 <FontAwesomeIcon icon={faHome} size="lg" />
-                Tableau de bord
+                Acceuil
               </Nav.Link>
               <Nav.Link as={Link} to="/cryptos">
                 <FontAwesomeIcon icon={faCoins} size="lg" />
-                Consultation des cours
+                Cryptomonnaie
               </Nav.Link>
               {userRole === "client" && (
                 <Nav.Link as={Link} to="/wallet">
                   <FontAwesomeIcon icon={faWallet} size="lg" />
-                  Gérer le portefeuille
+                  Portefeuille
                 </Nav.Link>
               )}
               <Nav.Link as={Link} to="/data">
                 <FontAwesomeIcon icon={faUser} size="lg" />
-                Donnée personnelle
+                Mon compte 
               </Nav.Link>
               {userRole === "admin" && (
                 <Nav.Link as={Link} to="/clients">

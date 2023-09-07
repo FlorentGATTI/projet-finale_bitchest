@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Navbar, Nav, Button, Image, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faCoins, faWallet, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faCoins, faWallet, faUser, faUsers, faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
   const navigate = useNavigate();
-  const [showBalance, setShowBalance] = useState(true);
   const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollPos, setLastScrollPos] = useState(0);
 
   const handleLogout = async () => {
     try {
@@ -23,30 +21,35 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
     }
   };
 
+  const toggleNavbar = () => {
+    setShowNavbar((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-
-      const shouldShowElements = currentScrollPos < lastScrollPos || currentScrollPos <= 50;
-      setShowBalance(shouldShowElements);
-      setShowNavbar(shouldShowElements);
-
-      setLastScrollPos(currentScrollPos);
+      if (window.scrollY > 20) {
+        // Si l'utilisateur défile de plus de 20px, fermez la navbar
+        setShowNavbar(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
+      // Ce code est exécuté lorsque le composant est démonté
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollPos]);
+  }, []); // Le tableau vide signifie que cet effet ne s'exécutera qu'une fois (comparable à componentDidMount)
 
   return (
     <div className="navbar-container" style={{ left: showNavbar ? "0" : "-100%" }}>
+      <div className="navbar-trigger" onClick={toggleNavbar}>
+        <FontAwesomeIcon icon={faBars} size="lg" />
+      </div>
       <Navbar bg="dark" variant="dark" expand="lg" className="sidebar-nav">
         <Container fluid>
           <Navbar.Brand as={Link} to="/dashboard">
-            <Image src="./assets/images/bitchest_logo.png" alt="BitChest Logo" className="navbar-logo" />
+            <Image src="/assets/images/bitchest_logo.png" alt="BitChest Logo" className="navbar-logo" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
@@ -67,7 +70,7 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
               )}
               <Nav.Link as={Link} to="/data">
                 <FontAwesomeIcon icon={faUser} size="lg" />
-                Mon compte 
+                Mon compte
               </Nav.Link>
               {userRole === "admin" && (
                 <Nav.Link as={Link} to="/clients">
@@ -82,7 +85,11 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
           </Button>
         </Container>
       </Navbar>
-      {userRole === "client" && showBalance && <div className="balance-banner">Solde: {userBalance} EUR</div>}
+      {userRole === "client" && (
+        <Link to="/wallet" className="balance-banner">
+          Solde: {userBalance} EUR
+        </Link>
+      )}{" "}
     </div>
   );
 }

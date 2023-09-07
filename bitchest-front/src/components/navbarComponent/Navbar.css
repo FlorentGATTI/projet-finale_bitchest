@@ -6,7 +6,6 @@
   width: 300px; /* Augmenter la largeur pour le bureau */
   z-index: 2000;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease-out; /* Ajout d'une transition lors du mouvement de la barre */
 }
 
@@ -19,12 +18,21 @@
   align-items: center;
   position: absolute;
   transition: transform 0.3s ease-out;
-  border-right: 1px solid rgba(255, 255, 255, 0.1); /* Ajout d'une bordure subtile à droite */
 }
 
-.navbar-container:not(:hover) .sidebar-nav {
-  transform: translateX(-100%);
+.navbar-trigger {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 2100;
+  color: white; /* Ajout d'une couleur pour voir le bouton burger */
 }
+
+/* .navbar-container:not(:hover) .sidebar-nav {
+  transform: translateX(-100%);
+} */
 
 .navbar-content {
   flex: 1;
@@ -93,6 +101,12 @@
   padding: 10px 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ajout d'un léger ombrage pour le faire ressortir */
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.balance-banner:hover {
+  color: #00cc66; /* ou une autre couleur pour le survol */
 }
 
 .sidebar-nav .navbar-nav {

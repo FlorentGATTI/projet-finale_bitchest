@@ -42,9 +42,7 @@ function Wallet() {
 
   const getProfitForCrypto = (cryptoId) => {
     const currentPrice = 0; // Faites un appel API pour obtenir le prix actuel
-    const averageBoughtPrice = transactions
-      .filter((t) => t.cryptocurrency_id === cryptoId)
-      .reduce((sum, t) => sum + t.price_at_purchase, 0);
+    const averageBoughtPrice = transactions.filter((t) => t.cryptocurrency_id === cryptoId).reduce((sum, t) => sum + t.price_at_purchase, 0);
     return currentPrice - averageBoughtPrice;
   };
 
@@ -63,6 +61,7 @@ function Wallet() {
           {transactions.map((transaction) => (
             <li key={transaction.id} className="crypto-item">
               {getCryptoNameById(transaction.cryptocurrency_id)}: {transaction.quantity}
+              Profit: {getProfitForCrypto(transaction.cryptocurrency_id)}
             </li>
           ))}
         </ul>
@@ -84,12 +83,7 @@ function Wallet() {
 
         <div className="form-group bg-items">
           <label>Quantité à vendre :</label>
-          <input
-            type="number"
-            className="crypto-input"
-            value={quantityToSell}
-            onChange={(e) => setQuantityToSell(Number(e.target.value))}
-          />
+          <input type="number" className="crypto-input" value={quantityToSell} onChange={(e) => setQuantityToSell(Number(e.target.value))} />
         </div>
 
         <button className="sell-button" onClick={handleSale}>

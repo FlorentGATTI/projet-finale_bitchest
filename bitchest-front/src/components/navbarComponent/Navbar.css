@@ -1,45 +1,186 @@
 .navbar-container {
-  width: 100%;
-  background-color: #292c36;
-  color: #fff;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 300px; /* Augmenter la largeur pour le bureau */
+  z-index: 2000;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-out; /* Ajout d'une transition lors du mouvement de la barre */
 }
 
-.navbar-brand-custom {
-  padding: 0.5rem 1.5rem; /* Increased padding as per request */
+.sidebar-nav {
+  background-color: #292c36;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  transition: transform 0.3s ease-out;
+  border-right: 1px solid rgba(255, 255, 255, 0.1); /* Ajout d'une bordure subtile à droite */
+}
+
+.navbar-container:not(:hover) .sidebar-nav {
+  transform: translateX(-100%);
+}
+
+.navbar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pour espacer les éléments */
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-header {
+  width: 100%;
+  padding: 20px 0;
+  flex: 0.2; /* Donner de la flexibilité pour permettre l'espacement */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Ajout d'une bordure subtile en bas */
+  margin-bottom: 15px; /* Espacement sous le logo */
+}
+
+.navbar-logo {
+  width: 80%; /* 50% de la largeur de son conteneur parent (c'est-à-dire .navbar-brand) */
+  height: auto; /* Ajuste automatiquement la hauteur pour maintenir le ratio de l'image */
+  max-width: 250px; /* Limite la largeur maximale pour éviter que le logo ne devienne trop grand sur les écrans larges */
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)); /* Léger ombrage sur le logo pour le faire ressortir */
 }
 
 .nav-link {
   color: #fff;
-  padding: 0.5rem 1rem;
-  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-weight: 500; /* Police plus audacieuse pour une meilleure lisibilité */
+  margin: 5px 0; /* Ajout d'un espacement vertical pour éviter l'encombrement */
 }
 
 .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
   color: #00cc66;
   text-decoration: none;
 }
 
 .logout-btn {
-  margin-left: 20px;
-  background-color: #ff6666;
-  border: none;
-  transition: background-color 0.3s;
+  width: 50%;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.1); /* Ajout d'une bordure pour le faire ressortir */
+  font-weight: bold; /* Rendre le texte audacieux */
+  margin-top: 15px; /* Espacement sur le dessus pour éviter l'encombrement */
+  max-width: 250px;
 }
 
-.logout-btn:hover {
-  background-color: #ff3333;
-  text-decoration: none;
+.balance-banner {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #292c36;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ajout d'un léger ombrage pour le faire ressortir */
 }
 
-@media screen and (max-width: 992px) {
+.sidebar-nav .navbar-nav {
+  flex: 0.9 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.sidebar-nav .nav-item {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.sidebar-nav .nav-link {
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar > .container,
+.navbar > .container-fluid,
+.navbar > .container-lg,
+.navbar > .container-md,
+.navbar > .container-sm,
+.navbar > .container-xl,
+.navbar > .container-xxl {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100% !important;
+  flex-direction: column;
+}
+
+@media (max-width: 992px) {
   .navbar-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1030;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
   }
-  .navbar-toggle {
-    order: 1; /* cela déplace le toggle (menu burger) vers la droite */
+
+  .sidebar-nav {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    transform: none !important;
+  }
+
+  .navbar-content {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .sidebar-nav .navbar-nav {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-container {
+    width: 100%;
+    height: auto;
+  }
+
+  .sidebar-nav {
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-container {
+    height: 60%;
+  }
+
+  .sidebar-nav {
+    height: 50%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .sidebar-nav .navbar-nav {
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
   }
 }

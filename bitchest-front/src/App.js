@@ -32,7 +32,7 @@ function App() {
   return (
     <Router>
       <div className="App container">
-        {isLoggedIn && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} userRole={userRole} />}
+        {isLoggedIn && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} userRole={userRole} userBalance={2500}/>}
         <div className="content">
           <Routes>
             <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LoginPage onLogin={handleLogin} />} />

@@ -12,10 +12,8 @@ class WalletFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => random_int(1, 100), // Remplacez 10 par le nombre maximum d'utilisateurs
-            'cryptocurrency_id' => random_int(1, 10), // Remplacez 10 par le nombre maximum de crypto-monnaies
-            'quantity' => $this->faker->randomFloat(8, 0.001, 1000), // Remplacez les bornes pour la quantité
+            'user_id' => null, // Nous allons le définir lors de la création
+            'balance' => $this->faker->randomFloat(2, 0, 1000), // Génère un solde au hasard entre 0 et 1000 euros
         ];
     }
 }
-

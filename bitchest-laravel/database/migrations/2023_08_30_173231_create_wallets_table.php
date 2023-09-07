@@ -11,12 +11,10 @@ class CreateWalletsTable extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('cryptocurrency_id');
-            $table->decimal('quantity', 18, 8);
+            $table->decimal('balance', 10, 2)->default(0); // le solde de l'utilisateur en euros
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('cryptocurrency_id')->references('id')->on('cryptocurrencies')->onDelete('cascade');
         });
     }
 

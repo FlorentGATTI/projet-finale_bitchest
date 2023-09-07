@@ -4,7 +4,7 @@ import { Navbar, Nav, Button, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
-function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
+function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
 
@@ -38,9 +38,12 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole }) {
                     Consultation des cours des crypto monnaies
                   </Nav.Link>
                   {userRole === "client" && (
-                    <Nav.Link as={Link} to="/wallet">
-                      Gérer le portefeuille
-                    </Nav.Link>
+                    <>
+                      <Nav.Link as={Link} to="/wallet">
+                        Gérer le portefeuille
+                      </Nav.Link>
+                      <Nav.Item className="navbar-balance">Solde: {userBalance} EUR</Nav.Item>
+                    </>
                   )}
                   <Nav.Link as={Link} to="/data">
                     Gérer leur donnée personnelle

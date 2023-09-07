@@ -20,8 +20,3 @@
   }
 }
 
-@media screen and (max-width: 992px) {
-  .content {
-    padding-top: 62px; /* Ajustez cette valeur si nécessaire pour éviter la bande blanche */
-  }
-}

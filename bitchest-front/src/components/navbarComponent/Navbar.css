@@ -30,10 +30,6 @@
   color: white; /* Ajout d'une couleur pour voir le bouton burger */
 }
 
-/* .navbar-container:not(:hover) .sidebar-nav {
-  transform: translateX(-100%);
-} */
-
 .navbar-content {
   flex: 1;
   display: flex;
@@ -55,7 +51,7 @@
   width: 80%; /* 50% de la largeur de son conteneur parent (c'est-à-dire .navbar-brand) */
   height: auto; /* Ajuste automatiquement la hauteur pour maintenir le ratio de l'image */
   max-width: 250px; /* Limite la largeur maximale pour éviter que le logo ne devienne trop grand sur les écrans larges */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)); /* Léger ombrage sur le logo pour le faire ressortir */
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .nav-link {
@@ -67,8 +63,8 @@
   padding: 12px 32px;
   border-radius: 4px;
   transition: background-color 0.2s ease;
-  font-weight: 500; /* Police plus audacieuse pour une meilleure lisibilité */
-  margin: 5px 0; /* Ajout d'un espacement vertical pour éviter l'encombrement */
+  font-weight: 500;
+  margin: 5px 0;
 }
 
 .nav-link:hover {
@@ -78,17 +74,30 @@
   text-decoration: none;
 }
 
+/* Styles spécifiques du navigateur */
 .navbar-collapse {
   align-items: baseline !important;
   padding-top: 45px;
+  flex-grow: 1;
+  align-items: center;
 }
 
+.navbar > .container,
+.navbar > .container-fluid,
+.navbar > .container-lg,
+.navbar > .container-md,
+.navbar > .container-sm,
+.navbar > .container-xl,
+.navbar > .container-xxl {
+  display: flex;
+  flex-wrap: initial;
+}
 .logout-btn {
   width: 50%;
   text-align: center;
-  border: 2px solid rgba(255, 255, 255, 0.1); /* Ajout d'une bordure pour le faire ressortir */
-  font-weight: bold; /* Rendre le texte audacieux */
-  margin-top: 15px; /* Espacement sur le dessus pour éviter l'encombrement */
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+  margin-top: 15px;
   max-width: 250px;
 }
 
@@ -100,13 +109,13 @@
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ajout d'un léger ombrage pour le faire ressortir */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   text-decoration: none;
 }
 
 .balance-banner:hover {
-  color: #00cc66; /* ou une autre couleur pour le survol */
+  color: #00cc66;
 }
 
 .sidebar-nav .navbar-nav {
@@ -156,8 +165,12 @@
 @media (max-width: 992px) {
   .navbar-container {
     width: 100%;
-    height: 100vh;
+    height: 50vh;
     overflow: hidden;
+  }
+
+  .navbar-collapse {
+    display: flex; /* Rétablissement du flex pour le desktop */
   }
 
   .sidebar-nav {
@@ -176,12 +189,24 @@
     flex-direction: row;
     justify-content: center;
   }
+
+  .nav-link {
+    justify-content: center;
+  }
+
+  .nav-link:hover {
+    padding: 8px 20px; /* Vous pouvez ajuster ceci si nécessaire */
+  }
 }
 
 @media (max-width: 767px) {
   .navbar-container {
     width: 100%;
-    height: auto;
+    height: 60vh;
+  }
+
+  .navbar-collapse {
+    display: block; /* Utilisez block pour les mobiles, comme discuté précédemment */
   }
 
   .sidebar-nav {
@@ -194,18 +219,58 @@
 
 @media (max-width: 576px) {
   .navbar-container {
-    height: 60%;
+    height: 90vh;
   }
 
   .sidebar-nav {
-    height: 50%;
+    height: auto;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 15px;
   }
 
   .sidebar-nav .navbar-nav {
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
+    gap: 10px;
+  }
+
+  .navbar-logo {
+    max-width: 180px;
+  }
+
+  .nav-link {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 474px) {
+  .navbar-container {
+    height: 100vh;
+  }
+
+  .balance-banner {
+    width: 22%;
+    height: 8.5%;
+    font-size: 9.5px;
+  }
+
+  .sidebar-nav {
+    height: auto;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 15px;
+  }
+
+  .sidebar-nav .navbar-nav {
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .navbar-logo {
+    max-width: 150px;
   }
 }

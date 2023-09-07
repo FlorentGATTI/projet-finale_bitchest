@@ -28,7 +28,7 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 20) {
-        // Si l'utilisateur défile de plus de 20px, fermez la navbar
+        // Si l'utilisateur défile de plus de 0px, fermez la navbar
         setShowNavbar(false);
       }
     };
@@ -46,13 +46,12 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
       <div className="navbar-trigger" onClick={toggleNavbar}>
         <FontAwesomeIcon icon={faBars} size="lg" />
       </div>
-      <Navbar bg="dark" variant="dark" expand="lg" className="sidebar-nav">
+      <Navbar bg="dark" variant="dark" expand={false} className="sidebar-nav">
         <Container fluid>
           <Navbar.Brand as={Link} to="/dashboard">
             <Image src="/assets/images/bitchest_logo.png" alt="BitChest Logo" className="navbar-logo" />
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
+          <Navbar.Collapse style={{ display: 'block' }}> {/* Forcer l'affichage des liens */}
             <Nav className="navbar-content mr-auto">
               <Nav.Link as={Link} to="/dashboard">
                 <FontAwesomeIcon icon={faHome} size="lg" />

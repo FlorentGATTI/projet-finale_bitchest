@@ -4,91 +4,86 @@ import "./Wallet.css";
 
 function Wallet() {
   const [transactions, setTransactions] = useState([]);
-  const [cryptoToSell, setCryptoToSell] = useState("");
-  const [quantityToSell, setQuantityToSell] = useState(0);
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchUserData = async () => {
       try {
-        const responseTransactions = await axios.get("http://localhost:8000/api/transactions");
-        setTransactions(responseTransactions.data);
-
-        const responseCryptocurrencies = await axios.get("http://localhost:8000/api/cryptocurrencies");
-        setCryptocurrencies(responseCryptocurrencies.data);
+        const response = await axios.get("http://localhost:8000/api/current-user");
+        setUserData(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des données:", error);
       }
     };
 
-    fetchTransactions();
+    fetchUserData();
   }, []);
 
-  const handleSale = async () => {
-    if (cryptoToSell && quantityToSell > 0) {
-      try {
-        // Appeler l'API pour enregistrer la vente (À faire)
-        console.log(`Vendu ${quantityToSell} ${cryptoToSell}`);
+  useEffect(() => {
+    const fetchAllData = async () => {
+      if (userData && userData.id) {
+        try {
+          const transactionsResp = await axios.get(`http://localhost:8000/api/wallet/transactions/${userData.id}`);
+          setTransactions(transactionsResp.data);
+          console.log("setTransactions", transactionsResp.data);
 
-        const response = await axios.get("http://localhost:8000/api/transactions");
-        setTransactions(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la vente:", error);
+          const cryptoResp = await axios.get("http://localhost:8000/api/cryptocurrencies");
+          setCryptocurrencies(cryptoResp.data);
+          console.log("setCryptocurrencies", cryptoResp.data);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des données:", error);
+        }
       }
-    } else {
-      console.log("Veuillez sélectionner une cryptomonnaie et une quantité valide.");
+    };
+
+    fetchAllData();
+  }, [userData]);
+
+  const handleSale = async (transactionId) => {
+    try {
+      await axios.post(`http://localhost:8000/api/wallet/sell/${transactionId}`);
+      const transactionsResp = await axios.get(`http://localhost:8000/api/wallet/transactions/${userData?.id}`);
+      setTransactions(transactionsResp.data);
+      console.log("setTransactions2", transactionsResp.data);
+    } catch (error) {
+      console.error("Erreur lors de la vente:", error);
     }
   };
 
-  const getProfitForCrypto = (cryptoId) => {
-    const currentPrice = 0; // Faites un appel API pour obtenir le prix actuel
-    const averageBoughtPrice = transactions.filter((t) => t.cryptocurrency_id === cryptoId).reduce((sum, t) => sum + t.price_at_purchase, 0);
-    return currentPrice - averageBoughtPrice;
+  const getCryptoNameById = (id) => {
+    const crypto = cryptocurrencies.find((c) => c.id === id);
+    return crypto ? crypto.name : "N/A";
   };
 
-  const getCryptoNameById = (cryptoId) => {
+  const profitForCrypto = (initialPrice, currentPrice, quantity) => (currentPrice - initialPrice) * quantity;
+
+  const getProfitForCrypto = (cryptoId, initialPrice, quantity) => {
     const crypto = cryptocurrencies.find((c) => c.id === cryptoId);
-    return crypto ? crypto.name : `ID: ${cryptoId}`;
+    return crypto ? profitForCrypto(initialPrice, crypto.currentPrice, quantity) : 0;
   };
 
   return (
     <div className="wallet-container bg-dark">
       <h2 className="py-5">Gérer le Wallet</h2>
-
       <div className="wallet-content bg-items">
         <h3>Contenu du portefeuille :</h3>
         <ul className="crypto-list">
-          {transactions.map((transaction) => (
-            <li key={transaction.id} className="crypto-item">
-              {getCryptoNameById(transaction.cryptocurrency_id)}: {transaction.quantity}
-              Profit: {getProfitForCrypto(transaction.cryptocurrency_id)}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="sell-form bg-items">
-        <h3>Vendre une cryptomonnaie</h3>
-
-        <div className="form-group">
-          <label>Choisissez une cryptomonnaie :</label>
-          <select className="crypto-select" value={cryptoToSell} onChange={(e) => setCryptoToSell(e.target.value)}>
-            {cryptocurrencies.map((crypto) => (
-              <option key={crypto.id} value={crypto.id}>
-                {crypto.name}
-              </option>
+          {Array.isArray(transactions) &&
+            transactions.map((transaction) => (
+              <li key={transaction.id} className="crypto-item">
+                {getCryptoNameById(transaction.cryptocurrency_id)}: {transaction.quantity}
+                <br />
+                Date d'achat: {transaction.date}
+                <br />
+                Cours lors de l'achat: {transaction.initialPrice}€
+                <br />
+                Plus-value: {getProfitForCrypto(transaction.cryptocurrency_id, transaction.initialPrice, transaction.quantity)}€
+                <br />
+                <button onClick={() => handleSale(transaction.id)}>Vendre tout</button>
+              </li>
             ))}
-          </select>
-        </div>
-
-        <div className="form-group bg-items">
-          <label>Quantité à vendre :</label>
-          <input type="number" className="crypto-input" value={quantityToSell} onChange={(e) => setQuantityToSell(Number(e.target.value))} />
-        </div>
-
-        <button className="sell-button" onClick={handleSale}>
-          Vendre
-        </button>
+        </ul>
       </div>
     </div>
   );

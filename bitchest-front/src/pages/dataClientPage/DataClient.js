@@ -14,9 +14,9 @@ function DataClient() {
     fetchUserData();
   }, []);
 
-  const fetchUserData = async () => {
+ const fetchUserData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/current-user-data");
+      const response = await axios.get("http://localhost:8000/api/current-user");
       setUserData(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des données:", error);

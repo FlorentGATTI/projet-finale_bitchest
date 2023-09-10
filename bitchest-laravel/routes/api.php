@@ -7,7 +7,7 @@ use App\Http\Controllers\CryptocurrencypriceController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\TransactionController;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     
     // Route pour afficher la liste des cryptomonnaies aux clients et aux admins
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
@@ -19,31 +19,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Data Personnel
     Route::get('/data-personel', [UserController::class, 'showPersonalData'])->name('data.personel');
-
-    // Routes pour les utilisateurs
-    Route::prefix('manage-clients')->group(function() {
-        Route::get('/', [UserController::class, 'index'])->name('manage.clients');
-        Route::get('/{id}', [UserController::class, 'show'])->name('manage.clients.show');
-        Route::post('/', [UserController::class, 'store'])->name('manage.clients.store');
-        Route::put('/{id}', [UserController::class, 'update'])->name('manage.clients.update');
-        Route::delete('/{id}', [UserController::class, 'destroy'])->name('manage.clients.destroy');
-    });
     
-    Route::get('/current-user-data', [UserController::class, 'currentUserData'])->name('current.user.data');
+    Route::get('/current-user', [UserController::class, 'currentUserData'])->name('current.user.data');
+
+    // Routes pour les utilisateurs (Utilisez resource si vous avez toutes les méthodes CRUD)
+    Route::resource('manage-clients', UserController::class)->names([
+        'index' => 'manage.clients',
+        'show' => 'manage.clients.show',
+        'store' => 'manage.clients.store',
+        'update' => 'manage.clients.update',
+        'destroy' => 'manage.clients.destroy'
+    ]);
 
     // Wallet routes
     Route::prefix('wallet')->group(function() {
         Route::get('/', [WalletController::class, 'index'])->name('wallet.index');
-        Route::get('/purchases', [WalletController::class, 'purchases'])->name('wallet.purchases');
+        Route::post('/buy/{crypto_id}', [WalletController::class, 'buyCryptocurrency'])->name('wallet.buy');
+        Route::post('/sell/{crypto_id}', [WalletController::class, 'sellCryptocurrency'])->name('wallet.sell');
+        Route::get('/balance', [WalletController::class, 'balance']);
     });
 
-    // Transactions routes
-    Route::prefix('transactions')->group(function() {
-        Route::get('/', [TransactionController::class, 'index'])->name('transactions.index');
-        Route::get('/{id}', [TransactionController::class, 'show'])->name('transactions.show');
-        Route::post('/', [TransactionController::class, 'store'])->name('transactions.store');
-        Route::put('/{id}', [TransactionController::class, 'update'])->name('transactions.update');
-        Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-        Route::get('/current-profit', [TransactionController::class, 'currentProfit'])->name('transactions.currentProfit');
-    });
+    // Transactions routes (Utilisez resource si vous avez toutes les méthodes CRUD)
+    Route::resource('transactions', TransactionController::class)->names([
+        'index' => 'transactions.index',
+        'show' => 'transactions.show',
+        'store' => 'transactions.store',
+        'update' => 'transactions.update',
+        'destroy' => 'transactions.destroy'
+    ]);
+    Route::get('/transactions/current-profit', [TransactionController::class, 'currentProfit'])->name('transactions.currentProfit');
 });
+

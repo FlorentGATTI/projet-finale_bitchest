@@ -10,18 +10,27 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
-        'balance'
     ];
 
     protected $hidden = [
         // 'password',
         'remember_token',
     ];
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    public function cryptoWallet()
+    {
+        return $this->hasOne(CryptoWallet::class);
+    }
 }

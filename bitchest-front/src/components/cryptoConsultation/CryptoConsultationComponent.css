@@ -1,4 +1,87 @@
+/* Mise à jour des styles pour les images crypto */
 .pictocrypto {
     margin: 0px 10px;
     vertical-align: top;
-}
+  }
+  
+  /* Mise à jour des styles pour la fenêtre modale */
+  .custom-modal {
+    background-color: #0E1F35; /* Couleur de fond de la modal */
+    border: none;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    max-width: 80%; /* Largeur maximale de la modal */
+    margin: 0 auto; /* Centrer la modal horizontalement */
+    color: #ffffff; /* Couleur du texte */
+  }
+  
+  /* Mise à jour des styles pour l'arrière-plan de la modal */
+  .custom-modal-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  /* Mise à jour des styles pour le bouton "Fermer" de la modal */
+  .custom-modal .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #FF3A4C; /* Couleur de fond de bouton "Fermer" */
+    color: #ffffff; /* Couleur du texte de bouton "Fermer" */
+    border: none;
+    border-radius: 50%;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  /* Styles pour le bouton Acheter */
+  .custom-modal .btn-buy {
+    background-color: #F0B90B; /* Couleur de fond du bouton Acheter */
+    color: #000000; /* Couleur du texte du bouton Acheter */
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  /* Styles pour les titres de la modal */
+  .custom-modal h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Styles pour les étiquettes des champs */
+  .custom-modal label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  /* Styles pour les champs de formulaire */
+  .custom-modal input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  /* Styles pour le bouton "Acheter" dans le formulaire */
+  .custom-modal button[type="submit"] {
+    background-color: #F0B90B;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  

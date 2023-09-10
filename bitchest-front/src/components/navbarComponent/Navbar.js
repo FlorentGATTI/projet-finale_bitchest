@@ -6,9 +6,11 @@ import { faHome, faCoins, faWallet, faUser, faUsers, faBars } from "@fortawesome
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
-function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
+function NavbarComponent({ onLogout, userRole, userBalance }) {
   const navigate = useNavigate();
   const [showNavbar, setShowNavbar] = useState(true);
+  const [showBalanceBanner, setShowBalanceBanner] = useState(true); // Nouvel état
+  const [lastScrollPosition, setLastScrollPosition] = useState(0);
 
   const handleLogout = async () => {
     try {
@@ -21,25 +23,24 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
     }
   };
 
-  const toggleNavbar = () => {
-    setShowNavbar((prev) => !prev);
-  };
+  const toggleNavbar = () => setShowNavbar((prev) => !prev);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        // Si l'utilisateur défile de plus de 0px, fermez la navbar
-        setShowNavbar(false);
+      if (window.scrollY > lastScrollPosition && window.scrollY > 20) {
+        // L'utilisateur a fait défiler vers le bas
+        setShowBalanceBanner(false);
+      } else if (window.scrollY < lastScrollPosition) {
+        // L'utilisateur a fait défiler vers le haut
+        setShowBalanceBanner(true);
       }
+      setLastScrollPosition(window.scrollY); // Mettre à jour la position du défilement
     };
 
     window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      // Ce code est exécuté lorsque le composant est démonté
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []); // Le tableau vide signifie que cet effet ne s'exécutera qu'une fois (comparable à componentDidMount)
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollPosition]);
 
   return (
     <div className="navbar-container" style={{ left: showNavbar ? "0" : "-100%" }}>
@@ -51,30 +52,25 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
           <Navbar.Brand as={Link} to="/dashboard">
             <Image src="/assets/images/bitchest_logo.png" alt="BitChest Logo" className="navbar-logo" />
           </Navbar.Brand>
-          <Navbar.Collapse style={{ display: 'block' }}> {/* Forcer l'affichage des liens */}
+          <Navbar.Collapse style={{ display: "block" }}>
             <Nav className="navbar-content mr-auto">
               <Nav.Link as={Link} to="/dashboard">
-                <FontAwesomeIcon icon={faHome} size="lg" />
-                Acceuil
+                <FontAwesomeIcon icon={faHome} size="lg" /> Acceuil
               </Nav.Link>
               <Nav.Link as={Link} to="/cryptos">
-                <FontAwesomeIcon icon={faCoins} size="lg" />
-                Cryptomonnaie
+                <FontAwesomeIcon icon={faCoins} size="lg" /> Cryptomonnaie
               </Nav.Link>
               {userRole === "client" && (
                 <Nav.Link as={Link} to="/wallet">
-                  <FontAwesomeIcon icon={faWallet} size="lg" />
-                  Portefeuille
+                  <FontAwesomeIcon icon={faWallet} size="lg" /> Portefeuille
                 </Nav.Link>
               )}
               <Nav.Link as={Link} to="/data">
-                <FontAwesomeIcon icon={faUser} size="lg" />
-                Mon compte
+                <FontAwesomeIcon icon={faUser} size="lg" /> Mon compte
               </Nav.Link>
               {userRole === "admin" && (
                 <Nav.Link as={Link} to="/clients">
-                  <FontAwesomeIcon icon={faUsers} size="lg" />
-                  Gérer les clients
+                  <FontAwesomeIcon icon={faUsers} size="lg" /> Gérer les clients
                 </Nav.Link>
               )}
             </Nav>
@@ -84,11 +80,11 @@ function NavbarComponent({ isLoggedIn, onLogout, userRole, userBalance }) {
           </Button>
         </Container>
       </Navbar>
-      {userRole === "client" && (
+      {userRole === "client" && userBalance !== null && showBalanceBanner && (
         <Link to="/wallet" className="balance-banner">
           Solde: {userBalance} EUR
         </Link>
-      )}{" "}
+      )}
     </div>
   );
 }

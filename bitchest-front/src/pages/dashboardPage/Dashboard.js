@@ -8,7 +8,7 @@ function Dashboard() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/current-user-data')
+    axios.get('http://localhost:8000/api/current-user')
       .then(response => {
         setUserData(response.data);
       })

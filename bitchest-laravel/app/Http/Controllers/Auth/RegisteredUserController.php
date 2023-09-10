@@ -31,11 +31,20 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $token = $user->createToken('authToken')->accessToken;
+
+    
 
         event(new Registered($user));
 
         Auth::login($user);
 
         return response()->noContent();
+
+        return response()->json([
+            "message" => "success",
+            "user" => $user,
+            "token" => $token
+        ]);
     }
 }

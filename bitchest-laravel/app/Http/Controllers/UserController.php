@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -79,5 +80,15 @@ class UserController extends Controller
     public function currentUserData()
     {
         return response()->json(auth()->user());
+    }
+
+    public function getBalance($userId) {
+        $user = Auth::user();
+        
+        if ($user && $user->id == $userId) {
+            return response()->json(['balance' => $user->balance]);
+        }
+    
+        return response()->json(['error' => 'Accès non autorisé'], 403);
     }
 }

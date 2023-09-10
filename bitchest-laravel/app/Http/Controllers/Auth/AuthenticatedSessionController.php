@@ -29,6 +29,28 @@ class AuthenticatedSessionController extends Controller
         }
     }
 
+    // public function store(LoginRequest $request)
+    // {
+    //     try {
+    //         $request->authenticate();
+    //         $request->session()->regenerate();
+
+    //         $user = Auth::user();
+    //         $token = $user->createToken('authToken')->accessToken;
+
+    //         return response()->json([
+    //             "message" => "success",
+    //             "user" => $user,
+    //             "token" => $token
+    //         ], 202);
+    //     } catch (\Throwable $th) {
+    //         return response()->json([
+    //             "message" => $th->getMessage()
+    //         ], 403);
+    //     }
+    // }
+
+
     /**
      * Destroy an authenticated session.
      */

@@ -10,10 +10,14 @@ class CreateCryptoWalletsTable extends Migration
     {
         Schema::create('crypto_wallets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('wallet_id')->constrained()->onDelete('cascade');
-            $table->foreignId('cryptocurrency_id')->constrained('cryptocurrencies')->onDelete('cascade');
-            $table->decimal('amount', 10, 2); // la quantité de la cryptomonnaie
+            $table->unsignedBigInteger('user_id'); // Assurez-vous d'avoir cette ligne
+            $table->unsignedBigInteger('cryptocurrency_id');
+            $table->decimal('quantity', 20, 8);
             $table->timestamps();
+
+            // Ajoutez également ces lignes pour créer les contraintes de clé étrangère:
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('cryptocurrency_id')->references('id')->on('cryptocurrencies')->onDelete('cascade');
         });
     }
 

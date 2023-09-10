@@ -16,7 +16,7 @@ function DashboardClient() {
       });
 
     // Chargement des données utilisateur
-    axios.get('http://localhost:8000/api/current-user-data')
+    axios.get('http://localhost:8000/api/current-user')
       .then(response => {
         setUserData(response.data);
       })

@@ -10,13 +10,9 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'cryptocurrency_id',
-        'quantity',
-        'price_per_unit',
-        'transaction_type',
+        'user_id', 'cryptocurrency_id', 'transaction_type', 
+        'quantity', 'price_at_time_of_transaction', 'transaction_date'
     ];
-    
 
     public function user()
     {
@@ -25,12 +21,6 @@ class Transaction extends Model
 
     public function cryptocurrency()
     {
-        return $this->belongsTo(Cryptocurrency::class);
-    }
-
-    public function currentProfit()
-    {
-        $currentPrice = $this->cryptocurrency->currentPrice(); // Je suppose que vous avez une méthode qui obtient le prix actuel
-        return ($currentPrice - $this->price_per_unit) * $this->quantity;
+        return $this->belongsTo(CryptoCurrency::class);
     }
 }

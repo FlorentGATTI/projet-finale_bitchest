@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Wallet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'cryptocurrency_id', 'quantity'];
+    protected $fillable = ['user_id', 'balance']; // 'cryptocurrency_id' et 'quantity' ont été retirés
 
     public function user()
     {

@@ -2,58 +2,143 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Wallet;
 use App\Models\Transaction;
-
+use App\Models\Cryptocurrency;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
-    public function index(Request $request)
+    private const TRANSACTION_BUY = 'achat';
+    private const TRANSACTION_SELL = 'vente';
+
+    private $user;
+
+    public function __construct()
     {
-        $user = $request->user(); // Récupérez l'utilisateur authentifié
-
-        // Récupérez le portefeuille de l'utilisateur avec les crypto-monnaies associées
-        $wallet = Wallet::with('cryptoCurrency')->where('user_id', $user->id)->first();
-
-        return response()->json($wallet);
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
     }
 
-    public function purchases(Request $request)
+    public function index()
     {
-        $user = $request->user(); // Récupérez l'utilisateur authentifié
+        $transactions = Transaction::where('user_id', $this->user->id)
+            ->with('cryptoCurrency')
+            ->get()
+            ->groupBy('cryptocurrency_id');
 
-        // Récupérez les achats effectués par l'utilisateur
-        $purchases = $user->wallet->transactions->where('transaction_type', 'buy');
+        $data = [];
 
-        return response()->json($purchases);
-    }
+        foreach ($transactions as $crypto_id => $transactionSet) {
+            $crypto = Cryptocurrency::find($crypto_id);
 
+            $totalBought = $this->getTotalQuantityByType($transactionSet, self::TRANSACTION_BUY);
+            $totalSold = $this->getTotalQuantityByType($transactionSet, self::TRANSACTION_SELL);
 
-    public function profits(Request $request)
-    {
-        $user = $request->user(); // Récupérez l'utilisateur authentifié
+            $balance = $totalBought - $totalSold;
 
-        // Récupérez la plus-value actuelle pour chaque crypto-monnaie dans le portefeuille de l'utilisateur
-        $profits = [];
-        foreach ($user->wallet->cryptoCurrency as $crypto) {
-            $profits[$crypto->id] = $crypto->currentProfit(); // Supposons que vous ayez une méthode currentProfit() dans le modèle Cryptocurrency
+            $totalSpentOnBuying = $transactionSet->where('transaction_type', self::TRANSACTION_BUY)->sum(function ($transaction) {
+                return $transaction->quantity * $transaction->price_at_transaction;
+            });
+
+            $currentValue = $crypto->current_price * $balance;
+            $profit = $currentValue - $totalSpentOnBuying;
+
+            $data[] = [
+                'cryptocurrency' => $crypto->name,
+                'balance' => $balance,
+                'profit' => $profit
+            ];
         }
 
-        return response()->json($profits);
+        return response()->json($data);
     }
 
-    public function show($id)
+    public function sellCryptocurrency(Cryptocurrency $crypto, Request $request)
     {
-        $transaction = Transaction::find($id);
-        if ($transaction) {
-            $profit = $transaction->currentProfit(); // Utilisez la méthode ici
+        $quantityToSell = $request->input('quantity');
+        $totalCrypto = $this->getCryptoBalance($crypto->id);
+
+        if ($totalCrypto >= $quantityToSell) {
+            $amountToCredit = $crypto->current_price * $quantityToSell;
+
+            $wallet = $this->user->wallet;
+            $wallet->balance += $amountToCredit;
+            $wallet->save();
+
+            Transaction::create([
+                'user_id' => $this->user->id,
+                'cryptocurrency_id' => $crypto->id,
+                'quantity' => -$quantityToSell,
+                'transaction_type' => self::TRANSACTION_SELL,
+                'price_at_transaction' => $crypto->current_price
+            ]);
+
             return response()->json([
-                'transaction' => $transaction,
-                'currentProfit' => $profit
+                'message' => "Cryptocurrency sold successfully!",
+                'credited_amount' => $amountToCredit
             ]);
         } else {
-            return response()->json(['message' => 'Transaction not found'], 404);
+            return response()->json([
+                'message' => "You don't have enough of this cryptocurrency to sell."
+            ], 400);
         }
+    }
+
+
+    public function buyCryptocurrency(Cryptocurrency $crypto, Request $request)
+    {
+        $quantityToBuy = $request->input('quantity');
+        $amountToDebit = $crypto->current_price * $quantityToBuy;
+
+        $wallet = $this->user->wallet;
+        if ($wallet->balance >= $amountToDebit) {
+            $wallet->balance -= $amountToDebit;
+            $wallet->save();
+
+            Transaction::create([
+                'user_id' => $this->user->id,
+                'cryptocurrency_id' => $crypto->id,
+                'quantity' => $quantityToBuy,
+                'transaction_type' => 'achat',
+                'price_at_transaction' => $crypto->current_price
+            ]);
+
+            return response()->json([
+                'message' => "Cryptocurrency bought successfully!",
+                'debited_amount' => $amountToDebit
+            ]);
+        } else {
+            return response()->json([
+                'message' => "You don't have enough balance to buy this cryptocurrency."
+            ], 400);
+        }
+    }
+
+
+
+    private function getTotalQuantityByType($transactionSet, $type)
+    {
+        return $transactionSet->where('transaction_type', $type)->sum('quantity');
+    }
+
+    private function getCryptoBalance($cryptoId)
+    {
+        $totalBought = $this->getTotalQuantityByType(Transaction::where('user_id', $this->user->id)->where('cryptocurrency_id', $cryptoId), self::TRANSACTION_BUY);
+        $totalSold = $this->getTotalQuantityByType(Transaction::where('user_id', $this->user->id)->where('cryptocurrency_id', $cryptoId), self::TRANSACTION_SELL);
+
+        return $totalBought - $totalSold;
+    }
+
+    public function balance()
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        $solde = $user->wallet->balance;  // Accéder à la balance via la relation wallet
+        return response()->json(['balance' => $solde]);
     }
 }

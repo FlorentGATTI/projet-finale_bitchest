@@ -9,7 +9,7 @@
 <p><em>BitChest</em> est une plateforme en ligne permettant aux utilisateurs d'acheter et de vendre des crypto-monnaies telles que Bitcoin, Ethereum, etc. Ce projet est réalisé dans le cadre d'un exercice pour la startup BitChest.</p>
 
 <h1>Technologies Utilisées :</h1>
-<p>Front-end : <em>React (ou Vue)</em><br>
+<p>Front-end : <em>React</em><br>
 Back-end : <em>Laravel</em><br>
 Base de données : <em>MySQL</em><br>
 API tierces : <em>[Liste des API utilisées]</em></p>

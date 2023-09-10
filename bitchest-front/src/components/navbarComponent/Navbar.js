@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 function NavbarComponent({ onLogout, userRole, userBalance }) {
+
   const navigate = useNavigate();
   const [showNavbar, setShowNavbar] = useState(true);
   const [showBalanceBanner, setShowBalanceBanner] = useState(true); // Nouvel état
@@ -26,21 +27,23 @@ function NavbarComponent({ onLogout, userRole, userBalance }) {
   const toggleNavbar = () => setShowNavbar((prev) => !prev);
 
   useEffect(() => {
+    console.log("Solde mis à jour:", userBalance);
+    // Autres actions nécessaires
+  }, [userBalance]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollPosition && window.scrollY > 20) {
-        // L'utilisateur a fait défiler vers le bas
         setShowBalanceBanner(false);
       } else if (window.scrollY < lastScrollPosition) {
-        // L'utilisateur a fait défiler vers le haut
         setShowBalanceBanner(true);
       }
-      setLastScrollPosition(window.scrollY); // Mettre à jour la position du défilement
+      setLastScrollPosition(window.scrollY);
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollPosition]);
+
 
   return (
     <div className="navbar-container" style={{ left: showNavbar ? "0" : "-100%" }}>

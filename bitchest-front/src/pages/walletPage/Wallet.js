@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Wallet.css";
 
 function Wallet() {
-  const [cryptocurrencies, setCryptocurrencies] = useState([]);
+  // const [cryptocurrencies, setCryptocurrencies] = useState([]);
   const [userData, setUserData] = useState({});
   const [cryptoWallets, setCryptoWallets] = useState([]);
 

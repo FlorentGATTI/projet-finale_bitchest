@@ -77,50 +77,34 @@ class WalletController extends Controller
 
     public function buyCryptocurrency($crypto, Request $request)
     {
-        // return response()->json([
-        //     'cryptoCurrencie' => $crypto, 
-        //     'request' => $request -> input('cryptocurrency_id')
-        // ], 400);
-
-        
         $quantity = $request->input('quantity');
-
         $latestCotation = $request->input('latestCotation');
-        // return response()->json([
-        //     'message' => "Cryptocurrency bought successfully!",
-        //     'price_per_unit' => $quantity * $latestCotation,
-        //     'latest' => $request->input('quantity'),
 
-        //     // 'debited_amount' => $amountToDebit
-        // ]);
+        $amountToDebit = $quantity * $latestCotation;
+        $wallet = $this->user->wallet;
 
-        $quantityToBuy = $request->input('quantity');
-        // $amountToDebit = $crypto->current_price * $quantityToBuy;
-        
-        Transaction::create([
-            'user_id' => $this->user->id,
-            'cryptocurrency_id' => $crypto,
-            'quantity' => $quantity,
-            'transaction_type' => 'buy',
-            'price_per_unit' => $quantity * $latestCotation,
-        ]);
+        if ($wallet->balance >= $amountToDebit) {
+            $wallet->balance -= $amountToDebit; // Deducting amount
+            $wallet->save(); // Saving the updated balance
 
-        return response()->json([
-            'message' => "Cryptocurrency bought successfully!",
+            Transaction::create([
+                'user_id' => $this->user->id,
+                'cryptocurrency_id' => $crypto,
+                'quantity' => $quantity,
+                'transaction_type' => 'buy',
+                'price_per_unit' => $latestCotation,
+            ]);
 
-            // 'debited_amount' => $amountToDebit
-        ]);
-
-        // $wallet = $this->user->wallet;
-        // if ($wallet->balance >= $amountToDebit) {
-        //     $wallet->balance -= $amountToDebit;
-        //     $wallet->save();
-        // } else {
-        //     return response()->json([
-        //         'message' => "You don't have enough balance to buy this cryptocurrency."
-        //     ], 400);
-        // }
+            return response()->json([
+                'message' => "Cryptocurrency bought successfully!"
+            ]);
+        } else {
+            return response()->json([
+                'message' => "Insufficient balance to buy the cryptocurrency."
+            ], 400);
+        }
     }
+
 
 
 

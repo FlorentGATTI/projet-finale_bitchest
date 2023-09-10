@@ -52,7 +52,7 @@ function App() {
   return (
     <Router>
       <div className="App container">
-        {isLoggedIn && <Navbar onLogout={handleLogout} userRole={userRole} userBalance={userBalance} />}
+        {isLoggedIn && <Navbar onLogout={handleLogout} userRole={userRole} updateUserBalance={fetchUserBalance} userBalance={userBalance} />}
         <div className="content">
           <Routes>
             <Route path="*" element={<Navigate to="/" replace />} />

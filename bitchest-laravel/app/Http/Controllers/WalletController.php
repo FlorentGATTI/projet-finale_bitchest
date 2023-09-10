@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Models\CryptoWallet;
+
 use App\Models\Cryptocurrency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,39 +24,24 @@ class WalletController extends Controller
         });
     }
 
-    public function index()
+    public function cryptoWallets()
     {
-        $transactions = Transaction::where('user_id', $this->user->id)
-            ->with('cryptoCurrency')
-            ->get()
-            ->groupBy('cryptocurrency_id');
+        $cryptoWallets = CryptoWallet::where('user_id', auth()->user()->id)
+            ->get();
 
-        $data = [];
+        // foreach ($cryptoWallets as $crypto_id => $transactionSet) {
+        //     $crypto = Cryptocurrency::find($crypto_id);
+        //     $balance = $transactionSet->sum('quantity');
+        //     $data[] = [
+        //         'cryptocurrency_id' => $crypto_id,
+        //         'cryptocurrency_name' => $crypto->name,
+        //         'balance' => $balance
+        //     ];
+        // }
 
-        foreach ($transactions as $crypto_id => $transactionSet) {
-            $crypto = Cryptocurrency::find($crypto_id);
-
-            $totalBought = $this->getTotalQuantityByType($transactionSet, self::TRANSACTION_BUY);
-            $totalSold = $this->getTotalQuantityByType($transactionSet, self::TRANSACTION_SELL);
-
-            $balance = $totalBought - $totalSold;
-
-            $totalSpentOnBuying = $transactionSet->where('transaction_type', self::TRANSACTION_BUY)->sum(function ($transaction) {
-                return $transaction->quantity * $transaction->price_at_transaction;
-            });
-
-            $currentValue = $crypto->current_price * $balance;
-            $profit = $currentValue - $totalSpentOnBuying;
-
-            $data[] = [
-                'cryptocurrency' => $crypto->name,
-                'balance' => $balance,
-                'profit' => $profit
-            ];
-        }
-
-        return response()->json($data);
+        return response()->json($cryptoWallets);
     }
+
 
     public function sellCryptocurrency(Cryptocurrency $crypto, Request $request)
     {
@@ -72,7 +59,7 @@ class WalletController extends Controller
                 'user_id' => $this->user->id,
                 'cryptocurrency_id' => $crypto->id,
                 'quantity' => -$quantityToSell,
-                'transaction_type' => self::TRANSACTION_SELL,
+                'transaction_type' => 'sell',
                 'price_at_transaction' => $crypto->current_price
             ]);
 
@@ -88,33 +75,51 @@ class WalletController extends Controller
     }
 
 
-    public function buyCryptocurrency(Cryptocurrency $crypto, Request $request)
+    public function buyCryptocurrency($crypto, Request $request)
     {
+        // return response()->json([
+        //     'cryptoCurrencie' => $crypto, 
+        //     'request' => $request -> input('cryptocurrency_id')
+        // ], 400);
+
+        
+        $quantity = $request->input('quantity');
+
+        $latestCotation = $request->input('latestCotation');
+        // return response()->json([
+        //     'message' => "Cryptocurrency bought successfully!",
+        //     'price_per_unit' => $quantity * $latestCotation,
+        //     'latest' => $request->input('quantity'),
+
+        //     // 'debited_amount' => $amountToDebit
+        // ]);
+
         $quantityToBuy = $request->input('quantity');
-        $amountToDebit = $crypto->current_price * $quantityToBuy;
+        // $amountToDebit = $crypto->current_price * $quantityToBuy;
+        
+        Transaction::create([
+            'user_id' => $this->user->id,
+            'cryptocurrency_id' => $crypto,
+            'quantity' => $quantity,
+            'transaction_type' => 'buy',
+            'price_per_unit' => $quantity * $latestCotation,
+        ]);
 
-        $wallet = $this->user->wallet;
-        if ($wallet->balance >= $amountToDebit) {
-            $wallet->balance -= $amountToDebit;
-            $wallet->save();
+        return response()->json([
+            'message' => "Cryptocurrency bought successfully!",
 
-            Transaction::create([
-                'user_id' => $this->user->id,
-                'cryptocurrency_id' => $crypto->id,
-                'quantity' => $quantityToBuy,
-                'transaction_type' => 'achat',
-                'price_at_transaction' => $crypto->current_price
-            ]);
+            // 'debited_amount' => $amountToDebit
+        ]);
 
-            return response()->json([
-                'message' => "Cryptocurrency bought successfully!",
-                'debited_amount' => $amountToDebit
-            ]);
-        } else {
-            return response()->json([
-                'message' => "You don't have enough balance to buy this cryptocurrency."
-            ], 400);
-        }
+        // $wallet = $this->user->wallet;
+        // if ($wallet->balance >= $amountToDebit) {
+        //     $wallet->balance -= $amountToDebit;
+        //     $wallet->save();
+        // } else {
+        //     return response()->json([
+        //         'message' => "You don't have enough balance to buy this cryptocurrency."
+        //     ], 400);
+        // }
     }
 
 

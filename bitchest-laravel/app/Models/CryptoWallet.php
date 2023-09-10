@@ -9,7 +9,7 @@ class CryptoWallet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['wallet_id', 'cryptocurrency_id', 'quantity']; // Exemple de colonnes remplies
+    protected $fillable = ['cryptocurrency_id', 'quantity']; // Exemple de colonnes remplies
 
     public function wallet()
     {

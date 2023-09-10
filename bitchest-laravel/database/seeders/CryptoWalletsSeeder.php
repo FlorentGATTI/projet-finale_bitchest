@@ -16,13 +16,13 @@ class CryptoWalletsSeeder extends Seeder
         $secondUser = User::find(2);
 
         // Si le premier utilisateur existe et n'a pas de portefeuille crypto, créez-en un
-        if ($firstUser && !$firstUser->cryptoWallet) {
-            CryptoWallet::factory()->create(['user_id' => $firstUser->id]);
+        if ($firstUser && $firstUser->cryptoWallets->isEmpty()) {
+            CryptoWallet::factory(rand(3, 4))->create(['user_id' => $firstUser->id]);
         }
 
         // Si le second utilisateur existe et n'a pas de portefeuille crypto, créez-en un
-        if ($secondUser && !$secondUser->cryptoWallet) {
-            CryptoWallet::factory()->create(['user_id' => $secondUser->id]);
+        if ($secondUser && $secondUser->cryptoWallets->isEmpty()) {
+            CryptoWallet::factory(rand(3, 4))->create(['user_id' => $secondUser->id]);
         }
 
         User::factory(50)->create()->each(function ($user) {
@@ -30,7 +30,6 @@ class CryptoWalletsSeeder extends Seeder
             $wallet = Wallet::factory()->make();
             $user->wallet()->save($wallet);
 
-            // Ajoute également des CryptoWallets pour cet utilisateur
             CryptoWallet::factory(rand(3, 4))->create(['user_id' => $user->id]);
         });
     }

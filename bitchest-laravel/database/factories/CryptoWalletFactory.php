@@ -14,7 +14,6 @@ class CryptoWalletFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::all()->random()->id,
             'cryptocurrency_id' => Cryptocurrency::all()->random()->id,
             'quantity' => $this->faker->randomFloat(8, 0.001, 1000),
         ];

@@ -15,7 +15,7 @@ import "./App.css";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("");
-  const [userBalance, setUserBalance] = useState(null); 
+  const [userBalance, setUserBalance] = useState(""); 
 
   console.log("Userrole", userRole);
 
@@ -44,7 +44,7 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserRole("");
-    setUserBalance(0); // Réinitialisez le solde lors de la déconnexion
+    setUserBalance(""); // Réinitialisez le solde lors de la déconnexion
   };
 
   const isAdmin = userRole === "admin";

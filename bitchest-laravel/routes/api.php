@@ -34,6 +34,7 @@ Route::middleware(['auth:api'])->group(function () {
     // Wallet routes
     Route::prefix('wallet')->group(function() {
         Route::get('/', [WalletController::class, 'index'])->name('wallet.index');
+        Route::get('/crypto-wallets', [WalletController::class, 'cryptoWallets'])->middleware('auth:sanctum');
         Route::post('/buy/{crypto_id}', [WalletController::class, 'buyCryptocurrency'])->name('wallet.buy');
         Route::post('/sell/{crypto_id}', [WalletController::class, 'sellCryptocurrency'])->name('wallet.sell');
         Route::get('/balance', [WalletController::class, 'balance']);

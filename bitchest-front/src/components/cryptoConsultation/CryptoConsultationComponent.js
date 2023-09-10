@@ -3,6 +3,7 @@ import axios from "axios";
 import CryptoChart from "../CryptoChart/CryptoChart";
 import Modal from "react-modal";
 import "./CryptoConsultationComponent.css";
+import { useRef } from "react";
 
 function CryptoConsultationComponent({ userRole, setTransactions }) {
   const [cryptocurrencies, setCryptocurrencies] = useState([]);
@@ -11,6 +12,10 @@ function CryptoConsultationComponent({ userRole, setTransactions }) {
   const [purchaseQuantity, setPurchaseQuantity] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState(null);
+
+  const cryptoIdRef = useRef();
+  const latestCotationRef = useRef("");
+
 
   const fetchData = async (url) => {
     try {
@@ -29,7 +34,11 @@ function CryptoConsultationComponent({ userRole, setTransactions }) {
     setIsModalOpen(false);
   };
 
-  const handleBuyClick = (cryptoId, cryptoName) => {
+  const handleBuyClick = (cryptoId, cryptoName, latestCotation) => {
+    cryptoIdRef.current = cryptoId;
+    console.log("latestCotation", latestCotation);
+    latestCotationRef.current = latestCotation;
+
     const userCryptoOwnership = 20;
     if (userCryptoOwnership >= 30) {
       alert(`Vous possédez déjà 30% ou plus de ${cryptoName}. Vous ne pouvez pas acheter davantage.`);
@@ -41,11 +50,15 @@ function CryptoConsultationComponent({ userRole, setTransactions }) {
   const handlePurchase = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:8000/api/wallet/buy/${purchaseQuantity}`);
-      const updatedCryptos = await fetchData("http://localhost:8000/api/cryptocurrenciesprice");
-      setCryptos(updatedCryptos);
-      const transactionsResp = await axios.get(`http://localhost:8000/api/wallet/transactions/${userData?.id}`);
-      setTransactions(transactionsResp.data);
+
+     const Ref = await axios.post(`http://localhost:8000/api/wallet/buy/${cryptoIdRef.current}`, 
+     {quantity:purchaseQuantity, latestCotation: latestCotationRef.current});
+
+      console.log("Ref", Ref);
+      // const updatedCryptos = await fetchData("http://localhost:8000/api/cryptocurrenciesprice");
+      // setCryptos(updatedCryptos);
+      // const transactionsResp = await axios.get(`http://localhost:8000/api/wallet/transactions/${userData?.id}`);
+      // setTransactions(transactionsResp.data);
     } catch (error) {
       console.error("Erreur lors de l'achat:", error);
     }
@@ -97,7 +110,7 @@ function CryptoConsultationComponent({ userRole, setTransactions }) {
               {userRole === "client" && chartData && (
                 <div>
                   <CryptoChart data={chartData} />
-                  <button className="btn btn-warning mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name)}>
+                  <button className="btn btn-warning mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name, +Number(latestCryptoPrice.price).toFixed(2))}>
                     Acheter
                   </button>
                 </div>

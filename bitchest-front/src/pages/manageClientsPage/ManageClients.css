@@ -1,39 +1,61 @@
 .manage-clients-container {
-    background: #1C1C1C;
-    color: #fff;
-    padding: 2rem;
-    max-height: 100%;
-    max-width: 100%;
-    height: 960px;
-    margin: auto;
-}
-
-.user-list, .user-details {
-    background: #232323;
-    padding: 1.5rem;
-    border-radius: 5px;
-    margin-top: 1.5rem;
-}
-
-.user-list ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.user-list li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #343434;
+    background-color: #1a1a1a;
+    padding: 20px;
+  }
+  
+  .user-list h3,
+  .user-details h3 {
+    color: #ffffff;
+    border-bottom: 2px solid #f7b731;
+    padding-bottom: 10px;
+  }
+  
+  .list-group-item {
     cursor: pointer;
-}
-
-.user-list li:last-child {
-    border-bottom: none;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.btn {
-    margin-right: 0.5rem;
-}
+    background-color: #2c2c2c;
+    color: #f7b731;
+    border: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .list-group-item:hover {
+    background-color: #404040;
+  }
+  
+  .form-control {
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #f7b731;
+  }
+  
+  .form-label {
+    color: #f7b731;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  button {
+    margin: 10px;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    filter: brightness(0.9);
+  }
+  
+  button:active {
+    filter: brightness(0.8);
+  }
+  

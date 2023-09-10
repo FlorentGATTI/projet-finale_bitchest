@@ -1,0 +1,53 @@
+/* ... Autres styles existants */
+
+.dropdown {
+    width: 300px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  }
+  
+  .selected-user-details {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #eee;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  
+  .selected-user-details p {
+    margin: 0;
+    padding: 5px 0;
+  }
+  
+  /* Ajoutez une animation lorsque l'utilisateur est sélectionné */
+  .dropdown + .selected-user-details {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* ... Autres styles existants */
+
+.dropdown {
+    width: 300px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    background-color: #333;  /* bg-dark pour le dropdown */
+    color: white;  /* Couleur du texte pour le bg-dark */
+  }
+  
+  .selected-user-details {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #eee;
+  }
+  
+  .selected-user-details p {
+    margin: 0;
+    padding: 5px 0;
+  }
+  

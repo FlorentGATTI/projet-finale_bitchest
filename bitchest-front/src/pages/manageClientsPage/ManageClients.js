@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, ListGroup, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Alert } from "react-bootstrap";
+import Select from "react-select";
 import "./ManageClients.css";
 
 function ManageClients() {
@@ -34,11 +35,14 @@ function ManageClients() {
     }
   };
 
-  const handleUserSelect = (user) => {
-    setName(user.name);
-    setEmail(user.email);
-    setRole(user.role);
-    setSelectedUserId(user.id);
+  const handleUserSelect = (selectedOption) => {
+    console.log("handleUserSelect called with:", selectedOption);
+
+    const { name = "", email = "", role = "client", id = null } = selectedOption.value;
+    setName(name);
+    setEmail(email);
+    setRole(role);
+    setSelectedUserId(id);
     setPassword(""); // Reset password field when selecting a user
   };
 
@@ -101,28 +105,40 @@ function ManageClients() {
     }
   };
 
+  const darkTheme = {
+    control: (base) => ({
+      ...base,
+      backgroundColor: "dark",
+      borderColor: "grey",
+      color: "white",
+    }),
+    option: (base) => ({
+      ...base,
+      color: "black",
+      backgroundColor: "white",
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: "white",
+    }),
+    clearIndicator: (base) => ({
+      ...base,
+      display: "none",
+    }),
+  };
+
   return (
     <Container className="manage-clients-container bg-dark text-white" style={{ minHeight: "100vh" }}>
       <h2 className="py-5">Gérer les clients</h2>
 
-      {/* Feedback message */}
       {feedback && <Alert variant="info">{feedback}</Alert>}
 
-      {/* Liste des utilisateurs */}
-      <div className="user-list mb-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <h3>Liste des utilisateurs</h3>
-        <ListGroup variant="flush" className="col-12 col-md-6">
-          {users.map((user) => (
-            <ListGroup.Item key={user.id} action onClick={() => handleUserSelect(user)}>
-              {user.name} - {user.email} - {user.role}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </div>
+      <h3>Liste des utilisateurs</h3>
+      <Select styles={darkTheme} className="mb-5" options={users.map((user) => ({ label: `${user.name} - ${user.email} - ${user.role}`, value: user }))} onChange={handleUserSelect} placeholder="Sélectionnez un utilisateur..." isSearchable={true} isClearable={true} />
 
       {/* Modification de l'utilisateur */}
       <div className="user-details mt-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <h3>Ajouter ou modifier  un utilisateur</h3>
+        <h3>Ajouter ou modifier un utilisateur</h3>
         <Form className="col-12 col-md-6 col-lg-4">
           <Form.Group>
             <Form.Label>Nom :</Form.Label>
@@ -141,7 +157,7 @@ function ManageClients() {
 
           <Form.Group>
             <Form.Label>Rôle :</Form.Label>
-            <Form.Control as="select" value={role} onChange={(e) => setRole(e.target.value)}>
+            <Form.Control style={{ textAlign: "center" }} as="select" value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="client">Client</option>
               <option value="admin">Admin</option>
             </Form.Control>

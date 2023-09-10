@@ -44,11 +44,11 @@ function NavbarComponent({ onLogout, userRole, userBalance }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollPosition]);
 
-
+  
   return (
     <div className="navbar-container" style={{ left: showNavbar ? "0" : "-100%" }}>
       <div className="navbar-trigger" onClick={toggleNavbar}>
-        <FontAwesomeIcon icon={faBars} size="lg" />
+        <FontAwesomeIcon icon={faBars} size="lg" /> 
       </div>
       <Navbar bg="dark" variant="dark" expand={false} className="sidebar-nav">
         <Container fluid>

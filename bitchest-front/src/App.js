@@ -16,6 +16,7 @@ function handleLogin(role, setIsLoggedIn, setUserRole, fetchUserBalance) {
   setUserRole(role);
   fetchUserBalance();
   localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("userRole", role);
 }
 
 function handleLogout(setIsLoggedIn, setUserRole, setUserBalance) {
@@ -23,16 +24,13 @@ function handleLogout(setIsLoggedIn, setUserRole, setUserBalance) {
   setUserRole("");
   setUserBalance("");
   localStorage.setItem("isLoggedIn", "false");
-}
-
-function WithAuthentication({ children, isLoggedIn }) {
-  return isLoggedIn ? children : <Navigate to="/" replace />;
+  localStorage.removeItem("userRole");
 }
 
 function App() {
   const initialLoginStatus = localStorage.getItem("isLoggedIn") === "true";
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole") || "");
   const [isLoggedIn, setIsLoggedIn] = useState(initialLoginStatus);
-  const [userRole, setUserRole] = useState("");
   const [userBalance, setUserBalance] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -58,6 +56,13 @@ function App() {
     }
   }, [isLoggedIn, fetchUserBalance]);
 
+  const renderAdminRoute = () => {
+    if (isLoggedIn && userRole === "admin") {
+      return <ManageClients />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  };
+
   return (
     <Router>
       <div className="App container">
@@ -69,41 +74,13 @@ function App() {
         {isLoggedIn && <Navbar onLogout={() => handleLogout(setIsLoggedIn, setUserRole, setUserBalance)} userRole={userRole} updateUserBalance={fetchUserBalance} userBalance={userBalance} />}
         <div className="content">
           <Routes>
-            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/" element={!isLoggedIn ? <LoginPage onLogin={(role) => handleLogin(role, setIsLoggedIn, setUserRole, fetchUserBalance)} /> : <Navigate to="/dashboard" replace />} />
-            <Route
-              path="/dashboard"
-              element={
-                <WithAuthentication isLoggedIn={isLoggedIn}>
-                  <Dashboard />
-                </WithAuthentication>
-              }
-            />
-            <Route
-              path="/cryptos"
-              element={
-                <WithAuthentication isLoggedIn={isLoggedIn}>
-                  <CryptoConsultation userRole={userRole} />
-                </WithAuthentication>
-              }
-            />
-            <Route
-              path="/wallet"
-              element={
-                <WithAuthentication isLoggedIn={isLoggedIn}>
-                  <Wallet userBalance={userBalance} updateUserBalance={fetchUserBalance} />
-                </WithAuthentication>
-              }
-            />
-            <Route
-              path="/data"
-              element={
-                <WithAuthentication isLoggedIn={isLoggedIn}>
-                  <DataPersonel />
-                </WithAuthentication>
-              }
-            />
-            <Route path="/admin" element={<WithAuthentication isLoggedIn={isLoggedIn}>{userRole === "admin" ? <ManageClients /> : <Navigate to="/dashboard" replace />}</WithAuthentication>} />
+            <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />} />
+            <Route path="/cryptos" element={isLoggedIn ? <CryptoConsultation userRole={userRole} /> : <Navigate to="/" replace />} />
+            <Route path="/wallet" element={isLoggedIn ? <Wallet userBalance={userBalance} updateUserBalance={fetchUserBalance} /> : <Navigate to="/" replace />} />
+            <Route path="/data" element={isLoggedIn ? <DataPersonel /> : <Navigate to="/" replace />} />
+            <Route path="/admin" element={renderAdminRoute()} />
+            <Route path="*" element={<Navigate to="/" replace />} /> {/* cette route doit être la dernière */}
           </Routes>
         </div>
       </div>

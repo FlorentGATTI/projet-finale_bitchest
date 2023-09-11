@@ -8,13 +8,32 @@ function DataClient() {
   const [showModal, setShowModal] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   useEffect(() => {
     fetchUserData();
   }, []);
 
- const fetchUserData = async () => {
+  const axiosInstance = axios.create();
+
+  // Intercepter les réponses et attendre en cas d'erreur 429
+  axiosInstance.interceptors.response.use(null, (error) => {
+    if (error.config && error.response && error.response.status === 429) {
+      // Doublez le délai à chaque tentative, avec un maximum de 5 secondes
+      const retryDelay = Math.min(error.config.retryDelay * 2, 5000);
+
+      // Réessayer la requête après le délai
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(axiosInstance(error.config)), retryDelay);
+      });
+    }
+
+    // Si ce n'est pas une erreur 429, renvoyez une promesse rejetée
+    return Promise.reject(error);
+  });
+
+  const fetchUserData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/current-user");
       setUserData(response.data);
@@ -52,6 +71,7 @@ function DataClient() {
   };
 
   return (
+    
     <Container className="data-personel-container bg-dark text-white" style={{ minHeight: "100vh" }}>
       <h2 className="py-5">Gérer mes données personnelles</h2>
 

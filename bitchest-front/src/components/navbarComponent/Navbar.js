@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Navbar, Nav, Button, Image, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,41 +10,37 @@ function NavbarComponent({ onLogout, userRole, userBalance }) {
 
   const navigate = useNavigate();
   const [showNavbar, setShowNavbar] = useState(true);
-  const [showBalanceBanner, setShowBalanceBanner] = useState(true); // Nouvel état
-  const [lastScrollPosition, setLastScrollPosition] = useState(0);
+  // const [showBalanceBanner, setShowBalanceBanner] = useState(true); // Nouvel état
+  // const [lastScrollPosition, setLastScrollPosition] = useState(0);
 
   const handleLogout = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      await axios.post("http://localhost:8000/logout");
-      onLogout();
-      navigate("/");
+        await axios.post("http://localhost:8000/logout");
+        onLogout();
+        navigate("/");
     } catch (error) {
-      console.error("Une erreur est survenue lors de la déconnexion", error);
+        console.error("Erreur lors de la déconnexion:", error);
     }
   };
 
   const toggleNavbar = () => setShowNavbar((prev) => !prev);
 
-  useEffect(() => {
-    console.log("Solde mis à jour:", userBalance);
-    // Autres actions nécessaires
-  }, [userBalance]);
+  // useEffect(() => {
+  //   // Fonction de gestion du défilement
+  //   const handleScroll = () => {
+  //     if (window.scrollY > lastScrollPosition && window.scrollY > 20) {
+  //       setShowBalanceBanner(false);
+  //     } else if (window.scrollY < lastScrollPosition) {
+  //       setShowBalanceBanner(true);
+  //     }
+  //     setLastScrollPosition(window.scrollY);
+  //   };
+  //   // Ajoute un écouteur d'événement pour le défilement
+  //   window.addEventListener("scroll", handleScroll);
+  //   // Supprime l'écouteur d'événement lors du démontage du composant
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [lastScrollPosition]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollPosition && window.scrollY > 20) {
-        setShowBalanceBanner(false);
-      } else if (window.scrollY < lastScrollPosition) {
-        setShowBalanceBanner(true);
-      }
-      setLastScrollPosition(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollPosition]);
-
-  
   return (
     <div className="navbar-container" style={{ left: showNavbar ? "0" : "-100%" }}>
       <div className="navbar-trigger" onClick={toggleNavbar}>
@@ -83,11 +79,12 @@ function NavbarComponent({ onLogout, userRole, userBalance }) {
           </Button>
         </Container>
       </Navbar>
-      {userRole === "client" && userBalance !== null && showBalanceBanner && (
+      {/* Affiche la bannière de solde uniquement si l'utilisateur est un client, le solde n'est pas nul et showBalanceBanner est vrai */}
+      {/* {userRole === "client" && userBalance !== null && showBalanceBanner && (
         <Link to="/wallet" className="balance-banner">
           Solde: {userBalance} EUR
         </Link>
-      )}
+      )} */}
     </div>
   );
 }

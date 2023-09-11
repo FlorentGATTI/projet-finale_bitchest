@@ -4,7 +4,7 @@ import Select from "react-select";
 
 function DashboardClient() {
   const [cryptos, setCryptos] = useState([]);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState("null");
   const [userConnected, setUserConnected] = useState("");
   const [balance, setBalance] = useState("");
   const [cryptosPrice, setCryptosPrice] = useState([]);
@@ -56,7 +56,7 @@ function DashboardClient() {
     const latestPrice = cryptosPrice.find((priceData) => priceData.crypto_currency_id === crypto.id);
     return {
       value: crypto.id,
-      label: `${crypto.name} - Acheté à: ${latestPrice ? latestPrice.price : "N/A"} €`,
+      label: `${crypto.name} - au cours de : ${latestPrice ? latestPrice.price : "N/A"} €`,
     };
   });
 
@@ -64,12 +64,12 @@ function DashboardClient() {
     control: (provided) => ({
       ...provided,
       backgroundColor: "dark",
-      borderColor: "grey",
-      color: "#F1F1F1",
+      borderColor: "dark",
+      color: "dark", // Modification de la couleur en noir
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "white",
+      color: "dark", // Modification de la couleur en noir
     }),
     menu: (provided) => ({
       ...provided,
@@ -84,7 +84,7 @@ function DashboardClient() {
       display: "none",
     }),
   };
-
+  
   return (
     <div className="dashboard-container bg-dark">
       <h2 className="py-5">Dashboard Client</h2>
@@ -114,7 +114,6 @@ function DashboardClient() {
           styles={customStyles}
           isClearable={false} // Désactiver le bouton de suppression
           isSearchable={false} // Empêche la recherche
-          isOptionDisabled={(option) => true} // Rend toutes les options non-cliquables
           placeholder="Afficher les cryptomonnaies ..."
         />
       </div>

@@ -10,14 +10,14 @@ class CryptoCurrencyPrice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cryptocurrency_id',
+        'crypto_currency_id',
         'price',
         'timestamp',
     ];
-    
+
 
     public function cryptocurrency()
     {
-        return $this->belongsTo(Cryptocurrency::class);
+        return $this->belongsTo(CryptoCurrency::class, 'crypto_currency_id');
     }
 }

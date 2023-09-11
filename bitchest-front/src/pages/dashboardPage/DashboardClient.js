@@ -53,7 +53,7 @@ function DashboardClient() {
   }, []);
 
   const cryptoOptions = cryptos.map((crypto) => {
-    const latestPrice = cryptosPrice.find((priceData) => priceData.cryptocurrency_id === crypto.id);
+    const latestPrice = cryptosPrice.find((priceData) => priceData.crypto_currency_id === crypto.id);
     return {
       value: crypto.id,
       label: `${crypto.name} - Acheté à: ${latestPrice ? latestPrice.price : "N/A"} €`,
@@ -115,7 +115,7 @@ function DashboardClient() {
           isClearable={false} // Désactiver le bouton de suppression
           isSearchable={false} // Empêche la recherche
           isOptionDisabled={(option) => true} // Rend toutes les options non-cliquables
-          placeholder="Afficher les utilisateurs..."
+          placeholder="Afficher les cryptomonnaies ..."
         />
       </div>
     </div>

@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CryptocurrencyController;
-use App\Http\Controllers\CryptocurrencypriceController;
+use App\Http\Controllers\CryptoCurrencyController;
+use App\Http\Controllers\CryptoCurrencypriceController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\TransactionController;
 
@@ -13,9 +13,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
     
     // Cryptocurrencies routes
-    Route::get('/cryptocurrencies', [CryptocurrencyController::class, 'index']);
-    Route::get('/cryptocurrenciesprice', [CryptocurrencypriceController::class, 'index']); 
-    Route::get('/cryptocurrencies/progression', [CryptocurrencyController::class, 'getCryptoProgression']);
+    Route::get('/cryptocurrencies', [CryptoCurrencyController::class, 'index']);
+    Route::get('/cryptocurrenciesprice', [CryptoCurrencypriceController::class, 'index']); 
+    Route::get('/cryptocurrencies/progression', [CryptoCurrencyController::class, 'getCryptoProgression']);
     
     // Data Personnel
     Route::get('/data-personel', [UserController::class, 'showPersonalData'])->name('data.personel');

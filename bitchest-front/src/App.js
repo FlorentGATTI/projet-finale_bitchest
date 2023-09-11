@@ -17,12 +17,9 @@ function App() {
   const [userRole, setUserRole] = useState("");
   const [userBalance, setUserBalance] = useState(""); 
 
-  console.log("Userrole", userRole);
-
   const fetchUserBalance = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/wallet/balance");
-      console.log("Réponse du backend: setUserBalance", response.data.balance);
       setUserBalance(response.data.balance);
     } catch (error) {
       console.error("Erreur lors de la récupération du solde de l'utilisateur:", error);

@@ -12,7 +12,7 @@ class TransactionsTableSeeder extends Seeder
         // Exemple d'insertion de transactions pour tester
         Transaction::create([
             'user_id' => 1,  // Remplacez par l'ID d'utilisateur approprié
-            'cryptocurrency_id' => 1,  // Remplacez par l'ID de crypto-monnaie approprié
+            'crypto_currency_id' => 1,  // Remplacez par l'ID de crypto-monnaie approprié
             'quantity' => 5,  // La quantité de crypto-monnaie
             'price_per_unit' => 3500,  // Le prix par unité de crypto-monnaie
             'transaction_type' => 'buy',  // Type de transaction (achat ou vente)
@@ -23,7 +23,7 @@ class TransactionsTableSeeder extends Seeder
 
         Transaction::create([
             'user_id' => 1,
-            'cryptocurrency_id' => 2,
+            'crypto_currency_id' => 2,
             'quantity' => 3,
             'price_per_unit' => 250,
             'transaction_type' => 'sell',

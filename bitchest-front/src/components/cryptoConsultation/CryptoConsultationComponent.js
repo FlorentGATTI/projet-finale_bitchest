@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import "./CryptoConsultationComponent.css";
 
 function CryptoConsultationComponent({ userRole, updateUserBalance }) {
-  const [cryptocurrencies, setCryptocurrencies] = useState([]);
+  const [cryptoCurrencies, setCryptoCurrencies] = useState([]);
   const [cryptos, setCryptos] = useState([]);
   const [cryptoProgression, setCryptoProgression] = useState([]);
   const [purchaseQuantity, setPurchaseQuantity] = useState("");
@@ -69,7 +69,7 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
         const [cryptosData, currenciesData, progressionData] = await Promise.all(urls.map((url) => fetchData(url)));
 
         setCryptos(cryptosData);
-        setCryptocurrencies(currenciesData);
+        setCryptoCurrencies(currenciesData);
         if (userRole === "client") {
           setCryptoProgression(progressionData);
         }
@@ -85,11 +85,11 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
     <div className="container-fluid bg-dark text-light mobile-pt py-5">
       <h2 className="mb-4">Liste des crypto-monnaies disponibles</h2>
       <ul className="list-unstyled">
-        {cryptocurrencies.map((crypto) => {
+        {cryptoCurrencies.map((crypto) => {
           const cryptoNameForImage = crypto.name.toLowerCase().replace(/ /g, "-");
 
           // Récupération des prix pour cette crypto spécifique
-          const cryptoPrices = cryptos.filter((item) => item.cryptocurrency_id === crypto.id);
+          const cryptoPrices = cryptos.filter((item) => item.crypto_currency_id === crypto.id);
 
           // Tri des prix en fonction de la date pour obtenir le plus récent
           cryptoPrices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // Assurez-vous d'ajuster le champ 'date' si son nom diffère dans vos données
@@ -97,8 +97,6 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
           const latestCryptoPrice = cryptoPrices[0];
 
           const chartData = cryptoProgression.find((item) => item.name.toLowerCase() === crypto.name.toLowerCase());
-
-          console.log(typeof latestCryptoPrice.price);
 
           return (
             <li key={crypto.id} className="mb-5">

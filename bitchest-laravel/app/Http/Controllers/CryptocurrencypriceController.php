@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cryptocurrency; 
-use App\Models\CryptocurrencyPrice;
+use App\Models\CryptoCurrency; 
+use App\Models\CryptoCurrencyPrice;
 
-class CryptocurrencyPriceController extends Controller
+class CryptoCurrencyPriceController extends Controller
 {
 
     public function index()
     {
-        $prices = CryptocurrencyPrice::all();
+        $prices = CryptoCurrencyPrice::all();
         return response()->json($prices);
     }
 
-    public function show(Cryptocurrency $cryptocurrency)
+    public function show(CryptoCurrency $cryptocurrency)
     {
-        $prices = CryptocurrencyPrice::where('cryptocurrency_id', $cryptocurrency->id)
+        $prices = CryptoCurrencyPrice::where('crypto_currency_id', $cryptocurrency->id)
             ->orderBy('timestamp', 'DESC')
             ->get();
 
@@ -26,14 +26,14 @@ class CryptocurrencyPriceController extends Controller
         ]);
     }
 
-    public function store(Cryptocurrency $cryptocurrency) 
+    public function store(CryptoCurrency $cryptocurrency) 
     {
         $data = request()->validate([
             'price' => 'required|numeric',
             'timestamp' => 'required|date'
         ]);
 
-        $price = new CryptocurrencyPrice($data);
+        $price = new CryptoCurrencyPrice($data);
         $price->cryptocurrency()->associate($cryptocurrency);
         $price->save();
         

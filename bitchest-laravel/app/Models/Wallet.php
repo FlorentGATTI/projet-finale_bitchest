@@ -9,7 +9,7 @@ class Wallet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'balance']; // 'cryptocurrency_id' et 'quantity' ont été retirés
+    protected $fillable = ['user_id', 'balance']; // 'crypto_currency_id' et 'quantity' ont été retirés
 
     public function user()
     {
@@ -21,7 +21,7 @@ class Wallet extends Model
         return $this->hasMany(CryptoWallet::class);
     }
 
-    public function cryptoCurrency()
+    public function cryptocurrency()
     {
         return $this->belongsTo(CryptoCurrency::class);
     }

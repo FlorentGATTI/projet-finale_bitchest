@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCryptocurrenciesTable extends Migration
+class CreateCryptoCurrenciesTable extends Migration
 {
     public function up()
     {
-        Schema::create('cryptocurrencies', function (Blueprint $table) {
+        Schema::create('crypto_currencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('symbol', 10)->unique();
@@ -18,6 +18,6 @@ class CreateCryptocurrenciesTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('cryptocurrencies');
+        Schema::dropIfExists('crypto_currencies');
     }
 }

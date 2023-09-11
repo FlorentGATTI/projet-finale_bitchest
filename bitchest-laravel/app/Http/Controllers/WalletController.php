@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 
-use App\Models\Cryptocurrency;
+use App\Models\CryptoCurrency;
 use App\Models\CryptoCurrencyPrice;
 
 use Illuminate\Http\Request;
@@ -27,18 +27,18 @@ class WalletController extends Controller
 
 
 
-    public function sellCryptocurrency($crypto, Request $request)
+    public function sellCryptoCurrency($crypto, Request $request)
     {
         $quantityToSell = $request->input('quantity');
         $totalCrypto = $this->getCryptoBalance($crypto);
 
-        $cryptocurrency = Cryptocurrency::find($crypto);
+        $cryptocurrency = CryptoCurrency::find($crypto);
         if (!$cryptocurrency) {
             return response()->json(['message' => 'Cryptocurrency not found'], 404);
         }
 
         // Récupérer le dernier prix pour cette crypto-monnaie
-        $price_per_unit = CryptoCurrencyPrice::where('cryptocurrency_id', $cryptocurrency->id)
+        $price_per_unit = CryptoCurrencyPrice::where('crypto_currency_id', $cryptocurrency->id)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -57,7 +57,7 @@ class WalletController extends Controller
             if ($remainingCrypto == 0) {
                 Transaction::create([
                     'user_id' => $this->user->id,
-                    'cryptocurrency_id' => $cryptocurrency->id,
+                    'crypto_currency_id' => $cryptocurrency->id,
                     'quantity' => -$quantityToSell,
                     'transaction_type' => 'sell',
                     'price_at_transaction' => $cryptocurrency->current_price,
@@ -77,7 +77,7 @@ class WalletController extends Controller
     }
 
 
-    public function buyCryptocurrency($crypto, Request $request)
+    public function buyCryptoCurrency($crypto, Request $request)
     {
         $quantity = $request->input('quantity');
         $latestCotation = $request->input('latestCotation');
@@ -91,7 +91,7 @@ class WalletController extends Controller
 
             Transaction::create([
                 'user_id' => $this->user->id,
-                'cryptocurrency_id' => $crypto,
+                'crypto_currency_id' => $crypto,
                 'quantity' => $quantity,
                 'transaction_type' => 'buy',
                 'price_per_unit' => $latestCotation,
@@ -117,8 +117,8 @@ class WalletController extends Controller
 
     private function getCryptoBalance($cryptoId)
     {
-        $totalBought = $this->getTotalQuantityByType(Transaction::where('user_id', $this->user->id)->where('cryptocurrency_id', $cryptoId), self::TRANSACTION_BUY);
-        $totalSold = $this->getTotalQuantityByType(Transaction::where('user_id', $this->user->id)->where('cryptocurrency_id', $cryptoId), self::TRANSACTION_SELL);
+        $totalBought = $this->getTotalQuantityByType(Transaction::where('user_id', $this->user->id)->where('crypto_currency_id', $cryptoId), self::TRANSACTION_BUY);
+        $totalSold = $this->getTotalQuantityByType(Transaction::where('user_id', $this->user->id)->where('crypto_currency_id', $cryptoId), self::TRANSACTION_SELL);
 
         return $totalBought - $totalSold;
     }

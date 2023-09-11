@@ -39,7 +39,7 @@ class CryptoCurrencyPricesTableSeeder extends Seeder
 
             for ($day = 1; $day <= 30; $day++) {
                 CryptoCurrencyPrice::create([
-                    'cryptocurrency_id' => $cryptoId,
+                    'crypto_currency_id' => $cryptoId,
                     'price' => $currentPrice,
                     'timestamp' => $currentDate,  // Use timestamp column here
                 ]);

@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Cryptocurrency;
+use App\Models\CryptoCurrency;
 
-class CryptocurrenciesTableSeeder extends Seeder
+class CryptoCurrenciesTableSeeder extends Seeder
 {
     public function run()
     {
@@ -23,7 +23,7 @@ class CryptocurrenciesTableSeeder extends Seeder
         ];
 
         foreach ($cryptocurrencies as $name => $symbol) {
-            Cryptocurrency::create([
+            CryptoCurrency::create([
                 'name' => $name,
                 'symbol' => $symbol,
             ]);

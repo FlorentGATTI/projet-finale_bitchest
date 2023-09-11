@@ -10,12 +10,12 @@ class CreateCryptoCurrencyPricesTable extends Migration
     {
         Schema::create('crypto_currency_prices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cryptocurrency_id');
+            $table->unsignedBigInteger('crypto_currency_id');
             $table->decimal('price', 12, 2);
             $table->timestamp('timestamp');
             $table->timestamps();
 
-            $table->foreign('cryptocurrency_id')->references('id')->on('cryptocurrencies')->onDelete('cascade');
+            $table->foreign('crypto_currency_id')->references('id')->on('crypto_currencies')->onDelete('cascade');
         });
     }
 

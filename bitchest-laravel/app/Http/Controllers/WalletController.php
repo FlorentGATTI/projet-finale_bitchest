@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
-use App\Models\CryptoWallet;
 
 use App\Models\Cryptocurrency;
+use App\Models\CryptoCurrencyPrice;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,44 +25,45 @@ class WalletController extends Controller
         });
     }
 
-    public function cryptoWallets()
-    {
-        $cryptoWallets = CryptoWallet::where('user_id', auth()->user()->id)
-            ->get();
-
-        // foreach ($cryptoWallets as $crypto_id => $transactionSet) {
-        //     $crypto = Cryptocurrency::find($crypto_id);
-        //     $balance = $transactionSet->sum('quantity');
-        //     $data[] = [
-        //         'cryptocurrency_id' => $crypto_id,
-        //         'cryptocurrency_name' => $crypto->name,
-        //         'balance' => $balance
-        //     ];
-        // }
-
-        return response()->json($cryptoWallets);
-    }
 
 
-    public function sellCryptocurrency(Cryptocurrency $crypto, Request $request)
+    public function sellCryptocurrency($crypto, Request $request)
     {
         $quantityToSell = $request->input('quantity');
-        $totalCrypto = $this->getCryptoBalance($crypto->id);
+        $totalCrypto = $this->getCryptoBalance($crypto);
+
+        $cryptocurrency = Cryptocurrency::find($crypto);
+        if (!$cryptocurrency) {
+            return response()->json(['message' => 'Cryptocurrency not found'], 404);
+        }
+
+        // Récupérer le dernier prix pour cette crypto-monnaie
+        $price_per_unit = CryptoCurrencyPrice::where('cryptocurrency_id', $cryptocurrency->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (!$price_per_unit) {
+            return response()->json(['message' => 'Price not found for the cryptocurrency'], 404);
+        }
 
         if ($totalCrypto >= $quantityToSell) {
-            $amountToCredit = $crypto->current_price * $quantityToSell;
+            $amountToCredit = $cryptocurrency->current_price * $quantityToSell;
 
             $wallet = $this->user->wallet;
             $wallet->balance += $amountToCredit;
             $wallet->save();
 
-            Transaction::create([
-                'user_id' => $this->user->id,
-                'cryptocurrency_id' => $crypto->id,
-                'quantity' => -$quantityToSell,
-                'transaction_type' => 'sell',
-                'price_at_transaction' => $crypto->current_price
-            ]);
+            $remainingCrypto = $this->getCryptoBalance($crypto);
+            if ($remainingCrypto == 0) {
+                Transaction::create([
+                    'user_id' => $this->user->id,
+                    'cryptocurrency_id' => $cryptocurrency->id,
+                    'quantity' => -$quantityToSell,
+                    'transaction_type' => 'sell',
+                    'price_at_transaction' => $cryptocurrency->current_price,
+                    'price_per_unit' => $price_per_unit->price  // Utilisation du prix récupéré
+                ]);
+            }
 
             return response()->json([
                 'message' => "Cryptocurrency sold successfully!",

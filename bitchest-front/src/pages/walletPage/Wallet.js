@@ -6,6 +6,24 @@ function Wallet() {
   // const [cryptocurrencies, setCryptocurrencies] = useState([]);
   const [userData, setUserData] = useState({});
   const [cryptoWallets, setCryptoWallets] = useState([]);
+  const [cryptocurrencies, setCryptocurrencies] = useState([]);
+
+  useEffect(() => {
+    const fetchCryptocurrencies = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/cryptocurrencies");
+        setCryptocurrencies(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des cryptomonnaies:", error);
+      }
+    };
+    fetchCryptocurrencies();
+  }, []);
+
+  const getCryptoNameById = (id) => {
+    const crypto = cryptocurrencies.find((c) => c.id === id);
+    return crypto ? crypto.name : "N/A";
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -46,7 +64,7 @@ function Wallet() {
           {Array.isArray(cryptoWallets) &&
             cryptoWallets.map((crypto) => (
               <li key={crypto.cryptocurrency_id} className="crypto-item">
-                {crypto.cryptocurrency_id}: {crypto.quantity}
+                {getCryptoNameById(crypto.cryptocurrency_id)}: {crypto.quantity}
               </li>
             ))}
         </ul>
@@ -56,10 +74,6 @@ function Wallet() {
 }
 
 export default Wallet;
-
-
-
-
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";

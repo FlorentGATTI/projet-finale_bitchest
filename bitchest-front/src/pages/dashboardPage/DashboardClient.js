@@ -52,14 +52,25 @@ function DashboardClient() {
       });
   }, []);
 
+  // Cette fonction retourne le dernier prix d'une cryptomonnaie basé sur l'ID
+  const getLastPrice = (cryptoId) => {
+    // Filtrer les prix par ID de cryptomonnaie
+    const pricesForCrypto = cryptosPrice.filter((price) => price.crypto_currency_id === cryptoId);
+
+    // Trier les prix filtrés par timestamp en ordre décroissant et prendre le premier élément
+    const latestPrice = pricesForCrypto.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+
+    return latestPrice ? latestPrice.price : "N/A";
+  };
+
+  // Mapper à travers cryptos pour créer les options du composant Select
   const cryptoOptions = cryptos.map((crypto) => {
-    const latestPrice = cryptosPrice.find((priceData) => priceData.crypto_currency_id === crypto.id);
+    const latestPrice = getLastPrice(crypto.id);
     return {
       value: crypto.id,
-      label: `${crypto.name} - au cours de : ${latestPrice ? latestPrice.price : "N/A"} €`,
+      label: `${crypto.name} - au cours de : ${latestPrice} €`,
     };
   });
-
   const customStyles = {
     control: (provided) => ({
       ...provided,
@@ -84,7 +95,7 @@ function DashboardClient() {
       display: "none",
     }),
   };
-  
+
   return (
     <div className="dashboard-container bg-dark">
       <h2 className="py-5">Dashboard Client</h2>

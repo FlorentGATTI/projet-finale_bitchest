@@ -24,7 +24,7 @@ class TransactionsTableSeeder extends Seeder
         Transaction::create([
             'user_id' => 1,
             'crypto_currency_id' => 2,
-            'quantity' => 3,
+            'quantity' => -3,
             'price_per_unit' => 250,
             'transaction_type' => 'sell',
             'transaction_date' => now()->subDays(5),

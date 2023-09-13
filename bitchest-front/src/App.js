@@ -75,7 +75,7 @@ function App() {
           <Routes>
             <Route path="/" element={!isLoggedIn ? <LoginPage onLogin={handleLogin} /> : <Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />} />
-            <Route path="/cryptos" element={isLoggedIn ? <CryptoConsultation userRole={userRole} /> : <Navigate to="/" replace />} />
+            <Route path="/cryptos" element={isLoggedIn ? <CryptoConsultation userRole={userRole} updateUserBalance={fetchUserBalance}/> : <Navigate to="/" replace />} />
             <Route path="/wallet" element={isLoggedIn ? <Wallet userBalance={userBalance} updateUserBalance={fetchUserBalance} /> : <Navigate to="/" replace />} />
             <Route path="/data" element={isLoggedIn ? <DataPersonel /> : <Navigate to="/" replace />} />
             <Route path="/clients" element={isLoggedIn && userRole === "admin" ? <ManageClients /> : <Navigate to="/dashboard" replace />} />

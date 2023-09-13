@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
-    private const TRANSACTION_BUY = 'achat';
-    private const TRANSACTION_SELL = 'vente';
+    private const TRANSACTION_BUY = 'buy';
+    private const TRANSACTION_SELL = 'sell';
 
     private $user;
 
@@ -29,7 +29,7 @@ class WalletController extends Controller
 
     public function sellCryptoCurrency($crypto, Request $request)
     {
-        $quantityToSell = $request->input('quantity');
+        $quantityToSell = $this->getCryptoBalance($crypto);
         $totalCrypto = $this->getCryptoBalance($crypto);
 
         $cryptocurrency = CryptoCurrency::find($crypto);
@@ -39,31 +39,34 @@ class WalletController extends Controller
 
         // Récupérer le dernier prix pour cette crypto-monnaie
         $price_per_unit = CryptoCurrencyPrice::where('crypto_currency_id', $cryptocurrency->id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('timestamp', 'desc')
             ->first();
 
         if (!$price_per_unit) {
             return response()->json(['message' => 'Price not found for the cryptocurrency'], 404);
         }
 
+        if ($quantityToSell <= 0) {
+            return response()->json([
+                'message' => "Vous n'avez pas de cette crypto-monnaie à vendre."
+            ], 400);
+        }
+
         if ($totalCrypto >= $quantityToSell) {
-            $amountToCredit = $cryptocurrency->current_price * $quantityToSell;
+            $amountToCredit = $price_per_unit->price * $quantityToSell;
 
             $wallet = $this->user->wallet;
             $wallet->balance += $amountToCredit;
             $wallet->save();
 
-            $remainingCrypto = $this->getCryptoBalance($crypto);
-            if ($remainingCrypto == 0) {
-                Transaction::create([
-                    'user_id' => $this->user->id,
-                    'crypto_currency_id' => $cryptocurrency->id,
-                    'quantity' => -$quantityToSell,
-                    'transaction_type' => 'sell',
-                    'price_at_transaction' => $cryptocurrency->current_price,
-                    'price_per_unit' => $price_per_unit->price  // Utilisation du prix récupéré
-                ]);
-            }
+            Transaction::create([
+                'user_id' => $this->user->id,
+                'crypto_currency_id' => $cryptocurrency->id,
+                'quantity' => -$quantityToSell,
+                'transaction_type' => 'sell',
+                'price_at_transaction' => $price_per_unit->price,
+                'price_per_unit' => $price_per_unit->price  // Utilisation du prix récupéré
+            ]);
 
             return response()->json([
                 'message' => "Cryptocurrency sold successfully!",
@@ -80,7 +83,16 @@ class WalletController extends Controller
     public function buyCryptoCurrency($crypto, Request $request)
     {
         $quantity = $request->input('quantity');
-        $latestCotation = $request->input('latestCotation');
+
+        $cryptocurrency = CryptoCurrency::find($crypto);
+        if (!$cryptocurrency) {
+            return response()->json(['message' => 'Cryptocurrency not found'], 404);
+        }
+
+        // Obtenez le dernier prix pour cette crypto-monnaie
+        $latestCotation = CryptoCurrencyPrice::where('crypto_currency_id', $cryptocurrency->id)
+            ->orderBy('timestamp', 'desc')
+            ->first()->price;
 
         $amountToDebit = $quantity * $latestCotation;
         $wallet = $this->user->wallet;
@@ -95,25 +107,34 @@ class WalletController extends Controller
                 'quantity' => $quantity,
                 'transaction_type' => 'buy',
                 'price_per_unit' => $latestCotation,
+                'price_at_transaction' => $latestCotation // Ajout de cette ligne
             ]);
 
             return response()->json([
                 'message' => "Cryptocurrency bought successfully!"
             ]);
         } else {
-            return response()->json([
-                'message' => "Insufficient balance to buy the cryptocurrency."
-            ], 400);
+            if ($wallet->balance < $amountToDebit) {
+                return response()->json([
+                    'message' => "Insufficient funds to buy the cryptocurrency."
+                ], 400);
+            }
         }
     }
-
-
-
 
     private function getTotalQuantityByType($transactionSet, $type)
     {
         return $transactionSet->where('transaction_type', $type)->sum('quantity');
     }
+
+    public function getBuyTransactions()
+    {
+        $buyTransactions = Transaction::where('user_id', $this->user->id)
+            ->where('transaction_type', self::TRANSACTION_BUY)
+            ->get();
+        return response()->json($buyTransactions);
+    }
+
 
     private function getCryptoBalance($cryptoId)
     {

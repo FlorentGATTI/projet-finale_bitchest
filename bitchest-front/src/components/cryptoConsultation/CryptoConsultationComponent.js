@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import CryptoChart from "../CryptoChart/CryptoChart";
 import Modal from "react-modal";
@@ -11,6 +11,7 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
   const [purchaseQuantity, setPurchaseQuantity] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCrypto, setSelectedCrypto] = useState({});
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const fetchData = async (url) => {
     try {
@@ -43,13 +44,19 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
   const handlePurchase = async (e) => {
     e.preventDefault();
     try {
+      console.log("Préparation à l'envoi de la requête avec : ", selectedCrypto.id, purchaseQuantity, selectedCrypto.latestCotation);
+
       const response = await axios.post(`http://localhost:8000/api/wallet/buy/${selectedCrypto.id}`, {
         quantity: purchaseQuantity,
         latestCotation: selectedCrypto.latestCotation,
       });
+      console.log("API Response: ", response.data);
 
       if (response.data.success) {
         updateUserBalance();
+        fetchAllData();
+        setFeedbackMessage(`${selectedCrypto.name} achetée avec succès !`);
+        setTimeout(() => setFeedbackMessage(null), 5000);
       }
     } catch (error) {
       console.error("Erreur lors de l'achat:", error);
@@ -57,29 +64,29 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
     handleCloseModal();
   };
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      const urls = ["http://localhost:8000/api/cryptocurrenciesprice", "http://localhost:8000/api/cryptocurrencies"];
+  const fetchAllData = useCallback(async () => {
+    const urls = ["http://localhost:8000/api/cryptocurrenciesprice", "http://localhost:8000/api/cryptocurrencies"];
 
+    if (userRole === "client") {
+      urls.push("http://localhost:8000/api/cryptocurrencies/progression");
+    }
+
+    try {
+      const [cryptosData, currenciesData, progressionData] = await Promise.all(urls.map((url) => fetchData(url)));
+
+      setCryptos(cryptosData);
+      setCryptoCurrencies(currenciesData);
       if (userRole === "client") {
-        urls.push("http://localhost:8000/api/cryptocurrencies/progression");
+        setCryptoProgression(progressionData);
       }
-
-      try {
-        const [cryptosData, currenciesData, progressionData] = await Promise.all(urls.map((url) => fetchData(url)));
-
-        setCryptos(cryptosData);
-        setCryptoCurrencies(currenciesData);
-        if (userRole === "client") {
-          setCryptoProgression(progressionData);
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des données:", error);
-      }
-    };
-
-    fetchAllData();
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+    }
   }, [userRole]);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
 
   return (
     <div className="container-fluid bg-dark text-light mobile-pt py-5">
@@ -100,6 +107,8 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
 
           return (
             <li key={crypto.id} className="mb-5">
+                            {feedbackMessage && <div className="feedback-message">{feedbackMessage}</div>}
+
               <img src={`/assets/images/${cryptoNameForImage}.png`} alt={crypto.name} className="pictocrypto" width="32" height="32" />
               <h3 className="font-weight-bold text-warning d-inline-block">
                 {crypto.name} ({crypto.symbol}) - {latestCryptoPrice ? Number(latestCryptoPrice.price).toFixed(2) : "N/A"}€

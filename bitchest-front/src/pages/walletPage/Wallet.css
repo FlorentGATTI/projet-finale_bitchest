@@ -45,3 +45,13 @@ button {
 .crypto-dropdown {
     margin-top: 1rem;
 }
+
+.feedback-message {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border-radius: 5px;
+}
+

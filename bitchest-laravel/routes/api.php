@@ -37,6 +37,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('/buy/{crypto_id}', [WalletController::class, 'buyCryptocurrency'])->name('wallet.buy');
         Route::post('/sell/{crypto_id}', [WalletController::class, 'sellCryptocurrency'])->name('wallet.sell');
         Route::get('/balance', [WalletController::class, 'balance']);
+        Route::get('/transactions/buy', [WalletController::class, 'getBuyTransactions']);
     });
 
     // Transactions routes (Utilisez resource si vous avez toutes les méthodes CRUD)

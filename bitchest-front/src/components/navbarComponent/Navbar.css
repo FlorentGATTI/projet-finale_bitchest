@@ -22,8 +22,8 @@
 
 .navbar-trigger {
   position: fixed;
-  top: 50%;
-  left: 0;
+  top: 2.5%;
+  left: 1%;
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 2100;

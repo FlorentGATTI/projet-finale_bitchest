@@ -65,7 +65,7 @@ class WalletController extends Controller
                 'quantity' => -$quantityToSell,
                 'transaction_type' => 'sell',
                 'price_at_transaction' => $price_per_unit->price,
-                'price_per_unit' => $price_per_unit->price  // Utilisation du prix récupéré
+                'price_per_unit' => $price_per_unit->price  
             ]);
 
             return response()->json([
@@ -98,8 +98,8 @@ class WalletController extends Controller
         $wallet = $this->user->wallet;
 
         if ($wallet->balance >= $amountToDebit) {
-            $wallet->balance -= $amountToDebit; // Deducting amount
-            $wallet->save(); // Saving the updated balance
+            $wallet->balance -= $amountToDebit; 
+            $wallet->save(); 
 
             Transaction::create([
                 'user_id' => $this->user->id,
@@ -107,7 +107,7 @@ class WalletController extends Controller
                 'quantity' => $quantity,
                 'transaction_type' => 'buy',
                 'price_per_unit' => $latestCotation,
-                'price_at_transaction' => $latestCotation // Ajout de cette ligne
+                'price_at_transaction' => $latestCotation 
             ]);
 
             return response()->json([
@@ -131,7 +131,7 @@ class WalletController extends Controller
     {
         $buyTransactions = Transaction::where('user_id', $this->user->id)
             ->where('transaction_type', self::TRANSACTION_BUY)
-            ->get();
+            ->get(['crypto_currency_id', 'quantity', 'price_per_unit']);
         return response()->json($buyTransactions);
     }
 

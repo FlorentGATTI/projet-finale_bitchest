@@ -59,7 +59,7 @@ function Wallet({ updateUserBalance }) {
     async function fetchData() {
       try {
         const [transactionsData, cryptosData] = await fetchTransactionsAndCryptos();
-        const buyTransactions = transactionsData.data.filter((t) => t.transaction_type === "buy"); // Filter buy transactions
+        const buyTransactions = transactionsData.data.filter((t) => t.transaction_type === "buy"); 
 
         setTransactions(buyTransactions);
 
@@ -79,34 +79,30 @@ function Wallet({ updateUserBalance }) {
 
   const handleSale = async (cryptoId) => {
     const transaction = transactions.find((t) => t.crypto_currency_id === cryptoId);
-  
+
     if (!transaction || transaction.quantity <= 0) {
       setError("Vous ne pouvez pas vendre de crypto avec une quantité de 0.");
       return;
     }
-  
+
     try {
       const response = await axios.post(`${API_URL}/wallet/sell/${cryptoId}`);
-  
-      // Check for errors in the response data
+
       if (response.data.error) {
         setError(response.data.error);
         return;
       }
-  
+
       const [transactionsData] = await fetchTransactionsAndCryptos();
       setTransactions(transactionsData.data);
       setFeedback(`${cryptos[cryptoId]} vendue avec succès !`);
       setTimeout(() => setFeedback(null), 5000);
-  
-      // Ajout de cette ligne pour mettre à jour le solde de l'utilisateur
       updateUserBalance();
     } catch (error) {
       setError("Une erreur s'est produite lors de la vente.");
       console.error(error);
     }
   };
-  
 
   const isZeroQuantity = useMemo(() => {
     if (selectedCrypto) {

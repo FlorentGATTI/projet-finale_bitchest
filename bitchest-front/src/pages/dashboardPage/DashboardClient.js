@@ -76,11 +76,11 @@ function DashboardClient() {
       ...provided,
       backgroundColor: "dark",
       borderColor: "dark",
-      color: "dark", // Modification de la couleur en noir
+      color: "dark", 
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "dark", // Modification de la couleur en noir
+      color: "dark", 
     }),
     menu: (provided) => ({
       ...provided,
@@ -115,7 +115,7 @@ function DashboardClient() {
 
       {/* Portefeuille */}
       <div className="wallet bg-items">
-        <h3>Portefeuille</h3>
+        <h3>Cryptomonnaies disponible</h3>
         <Select
           options={cryptoOptions}
           onChange={(selectedOption) => {

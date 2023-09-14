@@ -49,7 +49,7 @@ class UserController extends Controller
             'name' => 'string',
             'email' => 'email|unique:users,email,' . $user->id,
             'password' => 'string|min:6',
-            'role' => 'in:admin,client', // Ajout de cette ligne pour valider le rôle lors de la mise à jour
+            'role' => 'in:admin,client',
         ]);
 
         if (isset($data['password'])) {

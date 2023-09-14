@@ -17,7 +17,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'user' => $user,
-                'role' => $user->role, // Ajoutez cette ligne pour renvoyer le rôle de l'utilisateur
+                'role' => $user->role,
             ], 200);
         } else {
             return response()->json(['message' => 'Invalid credentials'], 401);

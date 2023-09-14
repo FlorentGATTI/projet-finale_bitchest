@@ -11,7 +11,7 @@ class CreateWalletsTable extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->decimal('balance', 10, 2)->default(0); // le solde de l'utilisateur en euros
+            $table->decimal('balance', 10, 2)->default(0); 
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

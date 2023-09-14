@@ -28,7 +28,6 @@ class TransactionController extends Controller
         $data = $request->validate([
             'amount' => 'required|numeric',
             'crypto_currency_id' => 'required|exists:cryptocurrencies,id',
-            // Ajoutez ici d'autres règles de validation
         ]);
 
         $transaction = Transaction::create($data);
@@ -45,7 +44,6 @@ class TransactionController extends Controller
         $data = $request->validate([
             'amount' => 'numeric',
             'crypto_currency_id' => 'exists:cryptocurrencies,id',
-            // Ajoutez ici d'autres règles de validation
         ]);
 
         $transaction->update($data);

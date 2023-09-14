@@ -32,7 +32,7 @@ class CryptoCurrencyPricesTableSeeder extends Seeder
 
             if (!$cryptoId) {
                 Log::error("No ID found for crypto: $crypto");
-                continue; // Skip to the next crypto
+                continue; 
             }
 
             Log::info("Seeding prices for $crypto with ID: $cryptoId");
@@ -41,10 +41,10 @@ class CryptoCurrencyPricesTableSeeder extends Seeder
                 CryptoCurrencyPrice::create([
                     'crypto_currency_id' => $cryptoId,
                     'price' => $currentPrice,
-                    'timestamp' => $currentDate,  // Use timestamp column here
+                    'timestamp' => $currentDate,  
                 ]);
 
-                $currentPrice += CotationGenerator::getCotationFor($crypto); // Utilisez la méthode depuis la classe CotationGenerator
+                $currentPrice += CotationGenerator::getCotationFor($crypto); 
                 $currentDate = $currentDate->addDay();
             }
             Log::info("Crypto: $crypto, ID: $cryptoId");

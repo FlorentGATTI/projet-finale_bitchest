@@ -43,7 +43,7 @@ function ManageClients() {
     setEmail(email);
     setRole(role);
     setSelectedUserId(id);
-    setPassword(""); // Reset password field when selecting a user
+    setPassword(""); 
   };
 
   const handleUpdateUser = async () => {

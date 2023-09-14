@@ -28,7 +28,6 @@ class CryptoCurrencyController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'symbol' => 'required|string|max:5',
-            // Ajoutez ici d'autres règles de validation
         ]);
 
         $cryptocurrency = CryptoCurrency::create($data);
@@ -45,7 +44,6 @@ class CryptoCurrencyController extends Controller
         $data = $request->validate([
             'name' => 'string',
             'symbol' => 'string|max:5',
-            // Ajoutez ici d'autres règles de validation
         ]);
 
         $cryptocurrency->update($data);

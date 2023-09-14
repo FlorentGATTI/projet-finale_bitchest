@@ -9,7 +9,6 @@ class TransactionsTableSeeder extends Seeder
 {
     public function run()
     {
-        // Exemple d'insertion de transactions pour tester
         Transaction::create([
             'user_id' => 1,  // Remplacez par l'ID d'utilisateur approprié
             'crypto_currency_id' => 1,  // Remplacez par l'ID de crypto-monnaie approprié
@@ -18,8 +17,6 @@ class TransactionsTableSeeder extends Seeder
             'transaction_type' => 'buy',  // Type de transaction (achat ou vente)
             'transaction_date' => now()->subDays(10),  // Date de la transaction
         ]);
-
-        // Vous pouvez ajouter plus d'exemples de transactions ici
 
         Transaction::create([
             'user_id' => 1,
@@ -30,6 +27,5 @@ class TransactionsTableSeeder extends Seeder
             'transaction_date' => now()->subDays(5),
         ]);
 
-        // Ajoutez d'autres transactions au besoin
     }
 }

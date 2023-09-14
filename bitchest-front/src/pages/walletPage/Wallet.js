@@ -59,7 +59,7 @@ function Wallet({ updateUserBalance }) {
     async function fetchData() {
       try {
         const [transactionsData, cryptosData] = await fetchTransactionsAndCryptos();
-        const buyTransactions = transactionsData.data.filter((t) => t.transaction_type === "buy"); 
+        const buyTransactions = transactionsData.data.filter((t) => t.transaction_type === "buy");
 
         setTransactions(buyTransactions);
 
@@ -143,6 +143,8 @@ function Wallet({ updateUserBalance }) {
             .map((transaction) => (
               <li key={transaction.id} className="crypto-item">
                 {cryptos[transaction.crypto_currency_id] || "N/A"}: {transaction.quantity}
+                {/* Montant total pour chaque crypto */}
+                (Total: ${(transaction.price_per_unit * transaction.quantity).toFixed(2)})
               </li>
             ))}
         </ul>

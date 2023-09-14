@@ -27,7 +27,7 @@
 }
 
 button {
-    background-color: #FFC107;
+    background-color: #36963b;
     color: #1C2331;
     border: none;
     padding: 0.5rem 1rem;
@@ -38,7 +38,7 @@ button {
     transition: 0.3s;
 
     &:hover {
-        background-color: #FFD54F;
+        background-color: #65bc40;
     }
 }
 

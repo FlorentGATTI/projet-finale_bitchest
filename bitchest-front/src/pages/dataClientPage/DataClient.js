@@ -90,7 +90,7 @@ function DataClient() {
             <Form.Control type="email" value={userData.email} onChange={(e) => setUserData({ ...userData, email: e.target.value })} style={{ textAlign: "center" }} />
           </Form.Group>
 
-          <Button className="mr-2 my-3" onClick={handleUpdateUser}>
+          <Button className="mr-2 my-3" variant="success" onClick={handleUpdateUser}>
             Mettre à jour
           </Button>
           <Button variant="warning" onClick={() => setShowModal(true)}>

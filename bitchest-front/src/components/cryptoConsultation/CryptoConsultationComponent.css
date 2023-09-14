@@ -44,7 +44,7 @@
   
   /* Styles pour le bouton Acheter */
   .custom-modal .btn-buy {
-    background-color: #F0B90B; /* Couleur de fond du bouton Acheter */
+    background-color: #20a727; /* Couleur de fond du bouton Acheter */
     color: #000000; /* Couleur du texte du bouton Acheter */
     border: none;
     border-radius: 4px;
@@ -77,7 +77,7 @@
   
   /* Styles pour le bouton "Acheter" dans le formulaire */
   .custom-modal button[type="submit"] {
-    background-color: #F0B90B;
+    background-color: #499946;
     color: #000000;
     border: none;
     border-radius: 4px;

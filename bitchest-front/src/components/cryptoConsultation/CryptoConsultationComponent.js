@@ -116,7 +116,7 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
               {userRole === "client" && chartData && (
                 <div>
                   <CryptoChart data={chartData} />
-                  <button className="btn btn-warning mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name, parseFloat(latestCryptoPrice.price).toFixed(2))}>
+                  <button className="btn btn-success mt-2" onClick={() => handleBuyClick(crypto.id, crypto.name, parseFloat(latestCryptoPrice.price).toFixed(2))}>
                     Acheter
                   </button>
                 </div>
@@ -139,7 +139,7 @@ function CryptoConsultationComponent({ userRole, updateUserBalance }) {
               }}
             />
           </label>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-success">
             Acheter
           </button>
           <button className="btn btn-danger" onClick={handleCloseModal}>
